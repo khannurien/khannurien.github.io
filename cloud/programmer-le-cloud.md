@@ -5,17 +5,13 @@
 Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gratuits de plusieurs fournisseurs. Ainsi, il vous faudra créer :
 
 * un compte [GitHub](https://github.com/) pour héberger votre dépôt et réaliser l'intégration puis le déploiement continu ;
-
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
-
 * un compte [Heroku](https://www.heroku.com/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
 Pour développer localement, sur votre machine, il vous faudra installer :
 
 * [Node.js](https://nodejs.org/en/) (version LTS, 16 actuellement) ;
-
 * [Docker](https://docs.docker.com/get-docker/) ;
-
 * [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
 N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Windows 10, le sous-système Linux pour Windows (*WSL*) est une bonne solution, en particulier car il fonctionne particulièrement bien avec l'IDE de Microsoft, Visual Studio Code :
@@ -27,25 +23,15 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 ## TD1 : une application Node.js
 
 * installation de Node.js
-  
   * [Comment installer Node.js sur Ubuntu 20.04 | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr)
-
 * création du dépôt git
-  
   * [GitHub - khannurien/i-want-typescript: 📜 Template repository for a new Node.js TypeScript project linted using ESLint with Prettier](https://github.com/khannurien/i-want-typescript)
-
 * inspection de `package.json`
-
 * installation de `systeminformation` comme dépendance
-
 * écriture du jeu de test
-
 * écriture de la fonction `getSystemInformation`
-
 * initialisation du serveur HTTP
-
 * mise-à-jour du jeu de test ?
-
 * https://docs.pact.io/ ?
 
 ## TD2 : conteneurisation avec Docker
@@ -85,5 +71,4 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
   ```
 
 * [GitHub Integration (Heroku GitHub Deploys) | Heroku Dev Center](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration)
-
 * bla
