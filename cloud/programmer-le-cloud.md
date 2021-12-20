@@ -16,14 +16,14 @@ Pour développer localement, sur votre machine, il vous faudra installer :
 
 N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Windows 10, le sous-système Linux pour Windows (*WSL*) est une bonne solution, en particulier car il fonctionne particulièrement bien avec l'IDE de Microsoft, Visual Studio Code :
 
-* [Installer WSL 2 | Microsoft Docs](https://docs.microsoft.com/fr-fr/windows/wsl/install)
+* [Installer WSL 2 -- Microsoft Docs](https://docs.microsoft.com/fr-fr/windows/wsl/install)
 
 Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du projet.
 
 ## TD1 : une application Node.js
 
 * installation de Node.js
-  * [Comment installer Node.js sur Ubuntu 20.04 | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr)
+  * [Comment installer Node.js sur Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr)
 * création du dépôt git
   * [GitHub - khannurien/i-want-typescript: 📜 Template repository for a new Node.js TypeScript project linted using ESLint with Prettier](https://github.com/khannurien/i-want-typescript)
 * inspection de `package.json`
@@ -36,7 +36,7 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 
 ## TD2 : conteneurisation avec Docker
 
-* installation de Docker (cf. [Comment installer et utiliser Docker sur Ubuntu 20.04 | DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-fr))
+* installation de Docker (cf. [Comment installer et utiliser Docker sur Ubuntu 20.04 -- DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-fr))
   
   ```shell
   sudo apt update
@@ -63,12 +63,12 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 
 ## TD4 : déploiement sur PaaS avec Heroku
 
-* installation de Heroku CLI (cf. [The Heroku CLI | Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli#download-and-install))
+* installation de Heroku CLI (cf. [The Heroku CLI -- Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli#download-and-install))
   
   ```shell
   curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
   heroku --version
   ```
 
-* [GitHub Integration (Heroku GitHub Deploys) | Heroku Dev Center](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration)
+* [GitHub Integration (Heroku GitHub Deploys) -- Heroku Dev Center](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration)
 * bla
