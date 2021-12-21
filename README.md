@@ -1,3 +1,7 @@
+---
+nav_exclude: true
+---
+
 # Labs
 
 ## Cloud Computing

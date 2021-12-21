@@ -25,7 +25,7 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 * installation de Node.js
   * [Comment installer Node.js sur Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr)
 * création du dépôt git
-  * [GitHub - khannurien/i-want-typescript: 📜 Template repository for a new Node.js TypeScript project linted using ESLint with Prettier](https://github.com/khannurien/i-want-typescript)
+  * [GitHub - khannurien/i-want-typescript](https://github.com/khannurien/i-want-typescript)
 * inspection de `package.json`
 * installation de `systeminformation` comme dépendance
 * écriture du jeu de test
