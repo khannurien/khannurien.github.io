@@ -31,6 +31,7 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 * écriture du jeu de test
 * écriture de la fonction `getSystemInformation`
 * initialisation du serveur HTTP
+* test de l'API avec `curl`
 * mise-à-jour du jeu de test ?
 * https://docs.pact.io/ ?
 
@@ -55,11 +56,58 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
   sudo docker run hello-world
   ```
 
-* bla
+* (optionnel) ajout de l'utilisateur courant au groupe `docker` pour utilisation sans `sudo` :
+
+  ```shell
+  sudo usermod -aG docker ${USER}
+  su - ${USER}
+  ```
+
+* écriture du `Dockerfile`
+
+* création de l'image
+
+  ```shell
+  sudo docker build -t sysinfo-api:0.0.1 .
+  ```
+
+* création d'un conteneur à partir de notre image
+
+  ```shell
+  sudo docker run -p 8000:8000 sysinfo-api:0.0.1
+  ```
+
+* test de l'API avec `curl`
+
+  ```shell
+  curl localhost:8000
+  ```
+
+* inspection de l'image
+
+  ```shell
+  sudo docker image history sysinfo-api:0.0.1
+  ```
+
+* modification du code et mise-à-jour de l'image
+
+* tag de l'image au nom de l'auteur pour le dépôt Docker
+
+  ```shell
+  sudo docker tag sysinfo-api:0.0.1 khannurien/sysinfo-api:0.0.1
+  ```
+
+* publication de l'image
+
+  ```shell
+  sudo docker login
+  sudo docker push khannurien/sysinfo-api:0.0.1
+  ```
 
 ## TD3 : CI/CD avec GitHub
 
-* bla
+* écriture du workflow ([documentation GitHub](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python))
+* commit et test
 
 ## TD4 : déploiement sur PaaS avec Heroku
 
@@ -70,5 +118,50 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
   heroku --version
   ```
 
+* connexion à Heroku
+
+  ```shell
+  heroku login
+  ```
+
+* connexion au Container Registry Heroku
+
+  ```shell
+  heroku container:login
+  ```
+
+* création de l'application Heroku
+
+  ```shell
+  heroku create
+  ```
+
+* publication de l'image Docker chez Heroku (TODO)
+
+  ```shell
+  docker tag sysinfo-api:0.0.1 registry.heroku.com/fathomless-tundra-66218/web
+  docker push registry.heroku.com/fathomless-tundra-66218/web
+  ```
+
+* démarrage de l'application sur un noeud
+
+  ```shell
+  heroku container:release web
+  ```
+
+* visite de l'application : erreur ?
+
+  ```shell
+  heroku logs --tail
+  ```
+
+  ```
+  2021-12-21T09:53:49.108685+00:00 heroku[web.1]: Error R10 (Boot timeout) -> Web process failed to bind to $PORT within 60 seconds of launch
+  ```
+
+* modification du code pour lire la variable `PORT` depuis l'environnement d'exécution
+* recréation de l'image Docker
+* démarrage de l'application
+
 * [GitHub Integration (Heroku GitHub Deploys) -- Heroku Dev Center](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration)
-* bla
+
