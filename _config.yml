@@ -1,4 +1,11 @@
-theme: jekyll-theme-hacker
+title: Labs
+description: 👨‍🏫 Courses and projects
+baseurl: "/labs"
+url: "https://khannurien.github.io"
+
+heading_anchors: true
+
+remote_theme: pmarsceill/just-the-docs
 plugins:
   - jekyll-relative-links
 relative_links:
