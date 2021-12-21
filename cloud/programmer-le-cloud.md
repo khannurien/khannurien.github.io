@@ -1,5 +1,7 @@
 # Programmer le Cloud
 
+{:toc}
+
 ## Prérequis
 
 Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gratuits de plusieurs fournisseurs. Ainsi, il vous faudra créer :
