@@ -1,7 +1,5 @@
 # Programmer le Cloud
 
-{:toc}
-
 ## Prérequis
 
 Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gratuits de plusieurs fournisseurs. Ainsi, il vous faudra créer :
@@ -24,17 +22,57 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 
 ## TD1 : une application Node.js
 
-* installation de Node.js
-  * [Comment installer Node.js sur Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr)
-* création du dépôt git
-  * [GitHub - khannurien/i-want-typescript](https://github.com/khannurien/i-want-typescript)
-* inspection de `package.json`
-* installation de `systeminformation` comme dépendance
-* écriture du jeu de test
-* écriture de la fonction `getSystemInformation`
-* initialisation du serveur HTTP
-* test de l'API avec `curl`
-* mise-à-jour du jeu de test ?
+### Objectif
+
+Dans ce premier TD, nous allons développer une micro-application pour **Node.js**. Elle sera écrite en **TypeScript**.
+
+TypeScript est un sur-ensemble de JavaScript, développé par Microsoft et distribué sous licence Apache, qui permet le typage strict (pas de conversion implicite entre les types, pas de comportement inattendu des opérateurs) et statique (détection d'erreurs de programmation dès la compilation, pas d'état illégal durant l'exécution) des variables, l'utilisation de classes et d'interfaces ainsi que le découpage du code en modules, l'équivalent des espaces de noms en C++. Le code TypeScript est transpilé vers JavaScript avant son déploiement -- les sources sont vérifiées puis transformées en JavaScript par le compilateur : il ne s'agit pas d'une opération de compilation d'un code source vers du code machine, mais de source à source.
+
+Node.js est un runtime pour JavaScript, c'est-à-dire une machine virtuelle qui fournit l'environnement d'exécution pour le langage. Node.js permet d'exécuter du code JavaScript côté serveur, et fournit dans sa bibliothèque standard un ensemble de primitives système. Node.js est livré avec `npm`, son gestionnaire de paquets, qui autorise l'installation et la gestion des dépendances d'une application.
+
+La configuration d'un projet TypeScript demande un peu de travail préalable, c'est pourquoi vous partirez d'un projet dit *template* disponible sur GitHub. Vous créerez votre propre dépôt pour l'application à partir de ce template, via le bouton *"Use this template"* :
+
+![Use this template](./images/github-template.png "Use this template")
+
+La fonctionnalité attendue est la suivante :
+
+* L'application écoute sur un port quelconque et répond aux requêtes HTTP sur un chemin précis (`http://localhost/api/v1/sysinfo`) ;
+* Elle retourne un objet (sérialisé en JSON) de la forme suivante :
+
+  ```typescript
+    interface ISystemInformation {
+      cpu: si.Systeminformation.CpuData;
+      system: si.Systeminformation.SystemData;
+      mem: si.Systeminformation.MemData;
+      os: si.Systeminformation.OsData;
+      currentLoad: si.Systeminformation.CurrentLoadData;
+      processes: si.Systeminformation.ProcessesData;
+      diskLayout: si.Systeminformation.DiskLayoutData[];
+      networkInterfaces: si.Systeminformation.NetworkInterfacesData[];
+    }
+  ```
+
+### Déroulé
+
+0. Mettez en place votre environnement de travail :
+    - Créez votre dépôt GitHub à partir du [template fourni](https://github.com/khannurien/i-want-typescript) ;
+    - [Installez Node.js](https://www.digitalocean.com/community/tutorials/how-to-install-node-js-on-ubuntu-20-04-fr) sur votre machine ;
+    - Lisez le `README` fourni dans le template et réalisez les étapes nécessaires pour exécuter le code d'exemple, puis les tests unitaires associés.
+
+1. Que pouvez-vous dire sur le fichier `package.json` ? Sur le fichier `package-lock.json` ?
+
+2. Installez avec `npm` la bibliothèque `systeminformation`. Quel impact cette opération a-t-elle sur votre dépôt git ?
+
+3. Écrivez l'application. Un soixantaine de lignes de code sont suffisantes à son fonctionnement : ne cherchez pas à généraliser. Découpez votre en quelques fonctions qui seront simples à tester par la suite.
+
+4. Testez le fonctionnement de votre application. Vous pouvez utiliser l'outil `curl` :
+
+    ```shell
+    curl http://localhost:8000
+    ```
+
+4. Écrivez un jeu de test pour votre application, et vérifiez son exécution.
+
 * https://docs.pact.io/ ?
 
 ## TD2 : conteneurisation avec Docker
