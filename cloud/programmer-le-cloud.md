@@ -1,5 +1,8 @@
 # Programmer le Cloud
 
+1. TOC
+{:toc}
+
 ## Prérequis
 
 Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gratuits de plusieurs fournisseurs. Ainsi, il vous faudra créer :
@@ -32,12 +35,14 @@ Node.js est un runtime pour JavaScript, c'est-à-dire une machine virtuelle qui 
 
 La configuration d'un projet TypeScript demande un peu de travail préalable, c'est pourquoi vous partirez d'un projet dit *template* disponible sur GitHub. Vous créerez votre propre dépôt pour l'application à partir de ce template, via le bouton *"Use this template"* :
 
-![Use this template](./images/github-template.png "Use this template")
+![Use this template](./images/github-template.png "GitHub template repository")
+
+Votre application devra être capable de donner, à travers un accès par le web, des informations concernant le système sur lequel elle s'exécute : nombre de cœurs de processeur et charge actuelle, quantité de mémoire disponible et utilisée, version du système d'exploitation, etc.
 
 La fonctionnalité attendue est la suivante :
 
 * L'application écoute sur un port quelconque et répond aux requêtes HTTP sur un chemin précis (`http://localhost/api/v1/sysinfo`) ;
-* Elle retourne un objet (sérialisé en JSON) de la forme suivante :
+* Pour ce chemin, on retourne un objet (sérialisé en JSON) de la forme suivante :
 
   ```typescript
     interface ISystemInformation {
@@ -52,6 +57,8 @@ La fonctionnalité attendue est la suivante :
     }
   ```
 
+* Pour tout autre chemin, on retournera une erreur 404.
+
 ### Déroulé
 
 0. Mettez en place votre environnement de travail :
@@ -63,97 +70,138 @@ La fonctionnalité attendue est la suivante :
 
 2. Installez avec `npm` la bibliothèque `systeminformation`. Quel impact cette opération a-t-elle sur votre dépôt git ?
 
-3. Écrivez l'application. Un soixantaine de lignes de code sont suffisantes à son fonctionnement : ne cherchez pas à généraliser. Découpez votre en quelques fonctions qui seront simples à tester par la suite.
+3. Écrivez l'application. Un soixantaine de lignes de code sont suffisantes à son fonctionnement : ne cherchez pas à généraliser. Découpez votre en quelques fonctions qui seront simples à tester par la suite. Quelles difficultés avez-vous rencontré ?
 
-4. Testez le fonctionnement de votre application. Vous pouvez utiliser l'outil `curl` :
+4. Testez le fonctionnement de votre application. Vous pouvez utiliser l'outil `curl`. À votre avis, pourquoi utilise-t-on ce formalisme pour construire l'URL de l'API ?
 
     ```shell
-    curl http://localhost:8000
+    curl http://localhost:8000/api/v1/sysinfo
     ```
 
-4. Écrivez un jeu de test pour votre application, et vérifiez son exécution.
+4. Écrivez un jeu de test pour votre application, et vérifiez son exécution. Pourquoi écrit-on un tel jeu de tests ?
 
 * https://docs.pact.io/ ?
 
 ## TD2 : conteneurisation avec Docker
 
-* installation de Docker (cf. [Comment installer et utiliser Docker sur Ubuntu 20.04 -- DigitalOcean](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04-fr))
+### Objectif
+
+Ce second TD introduit la notion d'**image** et de **conteneur** avec **Docker**.
+
+Un conteneur est un mécanisme d'isolation léger qui s'appuie sur le noyau du système d'exploitation hôte.
+
+Docker :
+
+Image :
+
+Pour construire votre image, vous allez vous appuyer sur la distribution Alpine Linux, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
+
+### Déroulé
+
+0. Installez Docker et testez son fonctionnement :
   
-  ```shell
-  sudo apt update
-  sudo apt install apt-transport-https ca-certificates curl software-properties-common
-  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-  sudo apt update
-  sudo apt install docker-ce
-  sudo systemctl status docker
-  ```
+    ```shell
+    sudo apt update
+    sudo apt install apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+    sudo apt update
+    sudo apt install docker-ce
+    # vérifiez le fonctionnement du daemon (sauf WSL2) :
+    sudo systemctl status docker
+    ```
 
-* (WSL2) démarrage du daemon et test
-  
-  ```shell
-  sudo dockerd > /dev/null 2>&1 &
-  sudo docker run hello-world
-  ```
+    Si vous utilisez WSL2, vous aurez besoin de lancer le daemon à la main :
 
-* (optionnel) ajout de l'utilisateur courant au groupe `docker` pour utilisation sans `sudo` :
+    ```shell
+    sudo dockerd > /dev/null 2>&1 &
+    # vérifiez le fonctionnement du daemon :
+    sudo docker run hello-world
+    ```
 
-  ```shell
-  sudo usermod -aG docker ${USER}
-  su - ${USER}
-  ```
+    Optionnellement, vous pouvez ajouter l'utilisateur courant au groupe `docker` pour utiliser Docker sans droits superutilisateur (donc sans `sudo` à chaque commande) :
 
-* écriture du `Dockerfile`
+    ```shell
+    sudo usermod -aG docker ${USER}
+    su - ${USER}
+    ```
 
-* création de l'image
+1. Écrivez votre première image dans un fichier nommé `Dockerfile` à la racine du dépôt de votre application. Voici un squelette de ce fichier, pour vous lancer :
 
-  ```shell
-  sudo docker build -t sysinfo-api:0.0.1 .
-  ```
+    ```Dockerfile
+    # image de départ
+    FROM alpine:3.15
 
-* création d'un conteneur à partir de notre image
+    # downgrade des privilèges
 
-  ```shell
-  sudo docker run -p 8000:8000 sysinfo-api:0.0.1
-  ```
+    # installation des paquets système
 
-* test de l'API avec `curl`
+    # copie des fichiers du dépôt
 
-  ```shell
-  curl localhost:8000
-  ```
+    # installation des dépendances avec npm
 
-* inspection de l'image
+    # build avec npm
 
-  ```shell
-  sudo docker image history sysinfo-api:0.0.1
-  ```
+    # exécution
+    CMD ["node", "dist/index.js"]
+    ```
 
-  ```shell
-  wget https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb
-  sudo apt install ./dive_0.10.0_linux_amd64.deb
-  dive sysinfo-api:0.0.1
-  ```
+2. Créez votre image à partir du `Dockerfile` :
 
-* modification du code et mise-à-jour de l'image
+    ```shell
+    sudo docker build -t sysinfo-api:0.0.1 .
+    ```
 
-* tag de l'image au nom de l'auteur pour le dépôt Docker
+3. Créez un conteneur à partir de votre image :
 
-  ```shell
-  sudo docker tag sysinfo-api:0.0.1 khannurien/sysinfo-api:0.0.1
-  ```
+    ```shell
+    sudo docker run -p 8000:8000 sysinfo-api:0.0.1
+    ```
 
-* publication de l'image
+    Puis testez votre application :
 
-  ```shell
-  sudo docker login
-  sudo docker push khannurien/sysinfo-api:0.0.1
-  ```
+    ```shell
+    curl http://localhost:8000
+    curl http://localhost:8000/api/v1/sysinfo
+    ```
+
+4. Inspectez votre image, d'abord avec la CLI de Docker :
+
+    ```shell
+    sudo docker image history sysinfo-api:0.0.1
+    ```
+
+    Puis utilisez l'outil `dive` :
+
+    ```shell
+    wget https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb
+    sudo apt install ./dive_0.10.0_linux_amd64.deb
+    dive sysinfo-api:0.0.1
+    ```
+
+    Que remarquez-vous ?
+
+5. Modifiez votre `Dockerfile` pour réaliser une construction *multi-stage* afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
+
+6. Vous allez maintenant pouvoir publier votre image Docker sur un dépôt (Docker Hub). Commencez par la tagger avec votre nom d'utilisateur (pas le mien :-)) :
+
+    ```shell
+    sudo docker tag sysinfo-api:0.0.2 khannurien/sysinfo-api:0.0.2
+    ```
+
+    Puis publiez-la :
+
+    ```shell
+    sudo docker login
+    sudo docker push khannurien/sysinfo-api:0.0.2
+    ```
 
 ## TD3 : CI/CD avec GitHub
 
 * écriture du workflow ([documentation GitHub](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python))
 * commit et test
+
+* relisez la question 4 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
 ## TD4 : déploiement sur PaaS avec Heroku
 
