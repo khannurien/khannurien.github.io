@@ -1,4 +1,5 @@
 # Programmer le Cloud
+{: .no_toc }
 
 1. TOC
 {:toc}
@@ -37,7 +38,7 @@ La configuration d'un projet TypeScript demande un peu de travail préalable, c'
 
 ![Use this template](./images/github-template.png "GitHub template repository")
 
-Votre application devra être capable de donner, à travers un accès par le web, des informations concernant le système sur lequel elle s'exécute : nombre de cœurs de processeur et charge actuelle, quantité de mémoire disponible et utilisée, version du système d'exploitation, etc.
+Votre application devra être accessible par le web et capable de donner des informations concernant le système sur lequel elle s'exécute : nombre de cœurs de processeur et charge actuelle, quantité de mémoire disponible et utilisée, version du système d'exploitation, etc.
 
 La fonctionnalité attendue est la suivante :
 
@@ -75,6 +76,7 @@ La fonctionnalité attendue est la suivante :
 4. Testez le fonctionnement de votre application. Vous pouvez utiliser l'outil `curl`. À votre avis, pourquoi utilise-t-on ce formalisme pour construire l'URL de l'API ?
 
     ```shell
+    curl http://localhost:8000
     curl http://localhost:8000/api/v1/sysinfo
     ```
 
@@ -86,15 +88,20 @@ La fonctionnalité attendue est la suivante :
 
 ### Objectif
 
-Ce second TD introduit la notion d'**image** et de **conteneur** avec **Docker**.
+Ce second TD introduit la notion d'**image** et de **conteneur** avec **Docker**. L'idée est de déporter l'exécution de votre application dans un processus isolé du reste du système. Ce processus sera initialisé à partir d'une image disque qui contiendra l'ensemble des dépendances nécessaires à l'exécution.
 
-Un conteneur est un mécanisme d'isolation léger qui s'appuie sur le noyau du système d'exploitation hôte.
+Un conteneur est un mécanisme d'isolation léger qui s'appuie sur le noyau du système d'exploitation hôte. Du point du vue du programme qui s'y exécute, la plateforme semble être un système complet. Néanmoins, les ressources qui lui sont allouées constituent un sous-ensemble virtualisé des ressources disponibles sur la machine hôte.
 
-Docker :
+Docker est en réalité une suite d'outils :
+* `dockerd` est un daemon qui fournit une API et une CLI, capable de construire les images, distribuables, qui représentent l'état initial d'un conteneur. C'est l'interface de haut niveau avec laquelle vous allez communiquer dans ce projet ;
+* `containerd`, initiative de la CNCF, gère le cycle de vie d'un conteneur (hypervision, exécution avec `runc`) et est responsable de la gestion des images (push, pull), du stockage et du réseau -- c'est-à-dire d'établir un lien entre les namespaces des différents conteneurs ;
+* `containerd-shim` est un processus intermédiaire qui restera le processus père d'un conteneur durant toute son exécution. Il maintient la liste des descripteurs de fichiers ouverts par le conteneur (à commencer par `stdio`). Cela permet de maintenir un lien avec le conteneur dans le cas où `containerd` est arrêté. Par ailleurs, il est responsable de remonter le code de sortie d'un conteneur au niveau supérieur ;
+* `runc` implémente la [spécification OCI](https://github.com/opencontainers/runtime-spec) et contient le code permettant l'exécution d'un conteneur. Il crée et démarre le conteneur, et termine son exécution.
 
-Image :
+![Docker breakdown](./images/docker-breakdown.png "Docker breakdown")
+[Avijit Sarkar](https://medium.com/@avijitsarkar123/docker-and-oci-runtimes-a9c23a5646d6)
 
-Pour construire votre image, vous allez vous appuyer sur la distribution Alpine Linux, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
+Pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
 
 ### Déroulé
 
@@ -132,19 +139,29 @@ Pour construire votre image, vous allez vous appuyer sur la distribution Alpine 
     # image de départ
     FROM alpine:3.15
 
+    # chemin de travail
+    WORKDIR ...
+
     # downgrade des privilèges
+    USER ...
 
     # installation des paquets système
+    RUN ...
 
     # copie des fichiers du dépôt
+    COPY ...
 
     # installation des dépendances avec npm
+    RUN ...
 
     # build avec npm
+    RUN ...
 
     # exécution
-    CMD ["node", "dist/index.js"]
+    CMD ...
     ```
+
+    [La documentation](https://docs.docker.com/engine/reference/builder/) fournit des explications détaillées sur les instructions à votre disposition.
 
 2. Créez votre image à partir du `Dockerfile` :
 
@@ -152,17 +169,10 @@ Pour construire votre image, vous allez vous appuyer sur la distribution Alpine 
     sudo docker build -t sysinfo-api:0.0.1 .
     ```
 
-3. Créez un conteneur à partir de votre image :
+3. Créez un conteneur à partir de votre image. À quoi sert le flag `-p` ? Le flag `-m` ? Le flag `--cpus` ? Pour ces deux derniers, faîtes varier les valeurs pour constater leur impact sur la sortie de votre application.
 
     ```shell
-    sudo docker run -p 8000:8000 sysinfo-api:0.0.1
-    ```
-
-    Puis testez votre application :
-
-    ```shell
-    curl http://localhost:8000
-    curl http://localhost:8000/api/v1/sysinfo
+    sudo docker run -p 8123:8000 -m1024m --cpus=1 sysinfo-api:0.0.1
     ```
 
 4. Inspectez votre image, d'abord avec la CLI de Docker :
@@ -179,7 +189,7 @@ Pour construire votre image, vous allez vous appuyer sur la distribution Alpine 
     dive sysinfo-api:0.0.1
     ```
 
-    Que remarquez-vous ?
+    Que remarquez-vous ? À votre avis, comment pourrait-on réduire la taille de l'image produite ?
 
 5. Modifiez votre `Dockerfile` pour réaliser une construction *multi-stage* afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
 
@@ -198,12 +208,24 @@ Pour construire votre image, vous allez vous appuyer sur la distribution Alpine 
 
 ## TD3 : CI/CD avec GitHub
 
+### Objectif
+
+Exécuter automatiquement la suite de tests...
+
+Construire l'image Docker...
+
+### Déroulé
+
 * écriture du workflow ([documentation GitHub](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python))
 * commit et test
 
 * relisez la question 4 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
 ## TD4 : déploiement sur PaaS avec Heroku
+
+### Objectif
+
+### Déroulé
 
 * installation de Heroku CLI (cf. [The Heroku CLI -- Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli#download-and-install))
   
@@ -256,6 +278,8 @@ Pour construire votre image, vous allez vous appuyer sur la distribution Alpine 
 * modification du code pour lire la variable `PORT` depuis l'environnement d'exécution
 * recréation de l'image Docker
 * démarrage de l'application
+
+* que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ?
 
 * [GitHub Integration (Heroku GitHub Deploys) -- Heroku Dev Center](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration)
 
