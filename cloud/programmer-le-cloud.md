@@ -8,7 +8,7 @@
 
 Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gratuits de plusieurs fournisseurs. Ainsi, il vous faudra créer :
 
-* un compte [GitHub](https://github.com/) pour héberger votre dépôt et réaliser l'intégration puis le déploiement continu ;
+* un compte [GitHub](https://github.com/) pour héberger votre dépôt et réaliser l'intégration et la livraison continues ;
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
 * un compte [Heroku](https://www.heroku.com/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
@@ -20,7 +20,7 @@ Pour développer localement, sur votre machine, il vous faudra installer :
 * [Docker](https://docs.docker.com/get-docker/) ;
 * [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
 
-Les instructions seront données détaillées dans le sujet.
+Les procédures d'installation seront données lorsque nécessaire, au fur et à mesure du sujet.
 
 N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Windows 10, le sous-système Linux pour Windows (*WSL*) est une bonne solution, en particulier car il fonctionne particulièrement bien avec l'IDE de Microsoft, Visual Studio Code :
 
@@ -30,7 +30,7 @@ Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la d
 
 ## Évaluation
 
-Vous restituerez ce mini-projet en produisant une archive contenant tous les fichiers que vous jugerez utile de fournir, ainsi qu'un compte-rendu comportant vos réponses aux questions qui seront posées tout au long du sujet, ainsi que toute remarque ou commentaire que vous souhaiterez ajouter à votre rendu.
+Vous restituerez ce mini-projet en produisant une archive contenant tous les fichiers que vous jugerez utile de fournir, ainsi qu'un compte-rendu comportant vos réponses aux questions qui seront posées tout au long du sujet, et toute remarque ou commentaire que vous souhaiteriez ajouter.
 
 La dernière séance de TD sera l'occasion de faire une courte démonstration de votre travail : préparez-vous bien, et n'hésitez surtout pas à poser vos questions par mail en amont.
 
