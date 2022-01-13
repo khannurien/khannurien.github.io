@@ -22,7 +22,13 @@ N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Window
 
 * [Installer WSL 2 -- Microsoft Docs](https://docs.microsoft.com/fr-fr/windows/wsl/install)
 
-Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du projet.
+Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du sujet.
+
+## Évaluation
+
+Vous restituerez ce mini-projet en produisant une archive contenant tous les fichiers que vous jugerez utile de fournir, ainsi qu'un compte-rendu comportant vos réponses aux questions qui seront posées tout au long du sujet, ainsi que toute remarque ou commentaire que vous souhaiterez ajouter à votre rendu.
+
+La dernière séance de TD sera l'occasion de faire une courte démonstration de votre travail : préparez-vous bien, et n'hésitez surtout pas à poser vos questions par mail en amont.
 
 ## TD1 : une application Node.js
 
@@ -69,7 +75,7 @@ La fonctionnalité attendue est la suivante :
 
 1. Que pouvez-vous dire sur le fichier `package.json` ? Sur le fichier `package-lock.json` ?
 
-2. Installez avec `npm` la bibliothèque `systeminformation`. Quel impact cette opération a-t-elle sur votre dépôt git ?
+2. Installez avec `npm` la bibliothèque `systeminformation`. Quel impact cette opération a-t-elle sur votre dépôt git ? Dans `package.json`, quelle différence y a-t-il entre `dependencies` et `devDependencies` ?
 
 3. Écrivez l'application. Un soixantaine de lignes de code sont suffisantes à son fonctionnement : ne cherchez pas à généraliser. Découpez votre code en quelques fonctions qui seront simples à tester par la suite. Quelles difficultés avez-vous rencontrées ?
 
@@ -82,7 +88,8 @@ La fonctionnalité attendue est la suivante :
 
 4. Écrivez un jeu de test pour votre application, et vérifiez son exécution. Pourquoi écrit-on un tel jeu de tests ?
 
-* https://docs.pact.io/ ?
+* https://docs.pact.io/5-minute-getting-started-guide/
+* https://github.com/pact-foundation/pact-js/blob/master/examples/typescript/test/get-dog.spec.ts
 
 ## TD2 : conteneurisation avec Docker
 
@@ -103,7 +110,9 @@ Docker est en réalité une suite d'outils :
 
 Dans l'écosystème Docker, une image correspond à une "recette" décrite dans un fichier, communément nommé `Dockerfile`, qui, au même titre qu'un `Makefile` pour `make` donne une suite d'instructions à la machine pour produire un binaire de l'application, donne ici la marche à suivre pour produire un conteneur qui comprendra l'application et son environnement d'exécution.
 
-La base de tout conteneur Docker est un système d'exploitation : pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
+Les instructions décrites dans un `Dockerfile` sont exécutées séquentiellement, à l'image de ce que pourrait faire un script shell pour préparer un environnement de travail. Contrairement à un script shell, impératif, le `Dockerfile` fournit une interface plus *déclarative* : certaines instructions masquent une grande complexité.
+
+En voici une première : la base de tout conteneur Docker est un système d'exploitation. Pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation. C'est la première ligne de tout `Dockerfile` : l'instruction `FROM`.
 
 ### Déroulé
 
@@ -193,7 +202,7 @@ La base de tout conteneur Docker est un système d'exploitation : pour construir
 
     Que remarquez-vous ? À votre avis, comment pourrait-on réduire la taille de l'image produite ?
 
-5. Modifiez votre `Dockerfile` pour réaliser une [construction *multi-stage*](https://docs.docker.com/develop/develop-images/multistage-build/) afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
+5. Modifiez votre `Dockerfile` pour réaliser une [construction *multi-stage*](https://docs.docker.com/develop/develop-images/multistage-build/) afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Cette image ne devra contenir que les dépendances nécessaires à l'exécution de votre application. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
 
 6. Vous allez maintenant pouvoir publier votre image Docker sur un dépôt (Docker Hub). Commencez par la tagger avec votre nom d'utilisateur (pas le mien :-)) :
 
@@ -208,6 +217,8 @@ La base de tout conteneur Docker est un système d'exploitation : pour construir
     sudo docker push khannurien/sysinfo-api:0.0.2
     ```
 
+7. Déployez un nouveau conteneur à partir de votre image publiée. Quelle commande utilisez-vous ?
+
 ## TD3 : CI/CD avec GitHub
 
 ### Objectif
@@ -218,7 +229,7 @@ Les opérations d'intégration continue (**CI**, pour *Continuous Integration*) 
 
 L'environnement d'exécution pour les tests est fourni par GitHub dans le cadre de leur produit *Actions*. C'est un conteneur Docker que vous configurez de manière déclarative, au travers d'un fichier YAML qui décrira l'événement déclencheur, les propriétés de l'environnement d'exécution, les actions à réaliser...
 
-Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition appelée *workflow* : les actions sont alors exécutées séquentiellement, ce qui permet de décrire des environnements d'exécution complexes. Vous pouvez regarder [l'action *Setup Node*](https://github.com/actions/setup-node) fournie par GitHub.
+Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition appelée *workflow* : les actions sont alors déclenchées par l'arrivée d'un événement et exécutées séquentiellement, ce qui permet de décrire des environnements d'exécution complexes. Vous pouvez regarder [l'action *Setup Node*](https://github.com/actions/setup-node) fournie par GitHub.
 
 ### Déroulé
 
@@ -239,65 +250,24 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 ### Objectif
 
-Pour cette dernière étape, nous allons nous intéresserau **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
+Pour cette dernière étape, nous allons nous intéresser au **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
 
-Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu**.
+Cette plateforme sera **Heroku**. En particulier, leur offre *PaaS* propose un tier gratuit pour déployer des applications sous forme de conteneurs sur leur infrastructure.
+
+Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, une image Docker sera recréée et déployée chez Heroku.
 
 ### Déroulé
 
-* installation de Heroku CLI (cf. [The Heroku CLI -- Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli#download-and-install))
-  
-  ```shell
-  curl https://cli-assets.heroku.com/install-ubuntu.sh | sh
-  heroku --version
-  ```
+0. Heroku fournit un outil en ligne de commande, *Heroku CLI*, qui facilite la connexion aux services, la création d'une application Heroku, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Heroku et créer une application. Pour cela, appuyez-vous sur [la documentation Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli#download-and-install). Notez l'URL qui vous est fournie par Heroku : elle comporte l'identifiant de votre application et vous permettra de passer aux étapes suivantes.
 
-* connexion à Heroku
+1. Heroku utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://devcenter.heroku.com/articles/container-registry-and-runtime#logging-in-to-the-registry).
 
-  ```shell
-  heroku login
-  ```
+2. Publiez l'image Docker de votre application sur le registre Heroku. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2 ; vous pouvez aussi utiliser la CLI Heroku. Toutes les informations sont dans [la documentation](https://devcenter.heroku.com/articles/container-registry-and-runtime#building-and-pushing-image-s). Quelle(s) différence(s) y a-t-il entre les deux méthodes ? Qu'est-ce que le *process type* auquel cette page fait référence ? Quelle valeur allez-vous utiliser ?
 
-* connexion au Container Registry Heroku
+3. Démarrez l'application, puis visitez-la à son URL. Que constatez-vous ? Inspectez les journaux de l'application grâce à Heroku CLI. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
 
-  ```shell
-  heroku container:login
-  ```
+4. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
 
-* création de l'application Heroku
+5. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
 
-  ```shell
-  heroku create
-  ```
-
-* publication de l'image Docker chez Heroku (TODO)
-
-  ```shell
-  docker tag sysinfo-api:0.0.1 registry.heroku.com/fathomless-tundra-66218/web
-  docker push registry.heroku.com/fathomless-tundra-66218/web
-  ```
-
-* démarrage de l'application sur un noeud
-
-  ```shell
-  heroku container:release web
-  ```
-
-* visite de l'application : erreur ?
-
-  ```shell
-  heroku logs --tail
-  ```
-
-  ```
-  2021-12-21T09:53:49.108685+00:00 heroku[web.1]: Error R10 (Boot timeout) -> Web process failed to bind to $PORT within 60 seconds of launch
-  ```
-
-* modification du code pour lire la variable `PORT` depuis l'environnement d'exécution
-* recréation de l'image Docker
-* démarrage de l'application
-
-* que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ?
-
-* [GitHub Integration (Heroku GitHub Deploys) -- Heroku Dev Center](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration)
-
+6. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Heroku dès lors qu'une modification est publiée sur le dépôt Git. À vous de trouver la solution ! Une première piste : il va falloir [activer l'intégration GitHub dans le dashboard Heroku](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration).
