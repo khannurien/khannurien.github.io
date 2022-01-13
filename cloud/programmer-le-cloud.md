@@ -101,7 +101,9 @@ Docker est en réalité une suite d'outils :
 ![Docker breakdown](./images/docker-breakdown.png "Docker breakdown")
 [Avijit Sarkar](https://medium.com/@avijitsarkar123/docker-and-oci-runtimes-a9c23a5646d6)
 
-Pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
+Dans l'écosystème Docker, une image correspond à une "recette" décrite dans un fichier, communément nommé `Dockerfile`, qui, au même titre qu'un `Makefile` pour `make` donne une suite d'instructions à la machine pour produire un binaire de l'application, donne ici la marche à suivre pour produire un conteneur qui comprendra l'application et son environnement d'exécution.
+
+La base de tout conteneur Docker est un système d'exploitation : pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
 
 ### Déroulé
 
@@ -191,7 +193,7 @@ Pour construire une image de votre application, vous allez vous appuyer sur la d
 
     Que remarquez-vous ? À votre avis, comment pourrait-on réduire la taille de l'image produite ?
 
-5. Modifiez votre `Dockerfile` pour réaliser une construction *multi-stage* afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
+5. Modifiez votre `Dockerfile` pour réaliser une [construction *multi-stage*](https://docs.docker.com/develop/develop-images/multistage-build/) afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
 
 6. Vous allez maintenant pouvoir publier votre image Docker sur un dépôt (Docker Hub). Commencez par la tagger avec votre nom d'utilisateur (pas le mien :-)) :
 
@@ -210,20 +212,36 @@ Pour construire une image de votre application, vous allez vous appuyer sur la d
 
 ### Objectif
 
-Exécuter automatiquement la suite de tests...
+Les opérations d'intégration continue (**CI**, pour *Continuous Integration*) et de livraison continue (**CD**, pour *Continuous Delivery*) sont à la base des pratiques DevOps. L'idée est d'avoir, à tout moment du cycle de vie d'une application, une *codebase* dans un état fonctionnel. Il s'agit, d'une part, de s'assurer qu'aucune régression n'est introduite par une évolution dans le code, et d'autre part, que le produit est toujours en état d'être compilé.
 
-Construire l'image Docker...
+À ces fins, nous allons faire en sorte d'exécuter automatiquement la suite de tests de l'application à chaque *commit* sur le dépôt Git. Si les tests passent au vert, alors l'image Docker de l'application sera elle aussi reconstruite et publiée dans la foulée.
+
+L'environnement d'exécution pour les tests est fourni par GitHub dans le cadre de leur produit *Actions*. C'est un conteneur Docker que vous configurez de manière déclarative, au travers d'un fichier YAML qui décrira l'événement déclencheur, les propriétés de l'environnement d'exécution, les actions à réaliser...
+
+Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition appelée *workflow* : les actions sont alors exécutées séquentiellement, ce qui permet de décrire des environnements d'exécution complexes. Vous pouvez regarder [l'action *Setup Node*](https://github.com/actions/setup-node) fournie par GitHub.
 
 ### Déroulé
 
-* écriture du workflow ([documentation GitHub](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs-or-python))
-* commit et test
+0. Suivez [le tutoriel de *GitHub Actions*](https://docs.github.com/en/actions/quickstart) pour écrire votre premier *workflow*.
 
-* relisez la question 4 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
+1. Inspirez-vous du *workflow* que vous avez écrit dans le cadre du tutoriel pour correspondre aux exigences suivantes :
+
+    * lors d'un *push* sur la branche `main` de votre dépôt ;
+    * installer Node dans la même version que vous utilisez pour développer ;
+    * installer les dépendances de votre application ;
+    * compiler l'application et exécuter la suite de tests unitaires.
+
+2. Une fois votre *workflow* écrit, testez-le. Comment vérifiez-vous son fonctionnement ?
+
+3. Relisez la question 4 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
 ## TD4 : déploiement sur PaaS avec Heroku
 
 ### Objectif
+
+Pour cette dernière étape, nous allons nous intéresserau **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
+
+Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu**.
 
 ### Déroulé
 
