@@ -12,11 +12,15 @@ Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gra
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
 * un compte [Heroku](https://www.heroku.com/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
+Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Heroku, il peut y avoir une latence entre la demande de création de compte et sa validation.
+
 Pour développer localement, sur votre machine, il vous faudra installer :
 
 * [Node.js](https://nodejs.org/en/) (version LTS, 16 actuellement) ;
 * [Docker](https://docs.docker.com/get-docker/) ;
 * [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+
+Les instructions seront données détaillées dans le sujet.
 
 N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Windows 10, le sous-système Linux pour Windows (*WSL*) est une bonne solution, en particulier car il fonctionne particulièrement bien avec l'IDE de Microsoft, Visual Studio Code :
 
