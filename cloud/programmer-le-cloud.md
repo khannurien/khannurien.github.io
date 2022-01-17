@@ -4,6 +4,12 @@
 1. TOC
 {:toc}
 
+## Objectifs
+
+Ce cours est l'occasion de vous initier aux pratiques DevOps, qui consistent à rapprocher le développement et l'administration système : "*You build it, you run it*".
+
+À l'issue du mini-projet, vous serez capable de créer une image Docker pour une application web, testée et déployée de manière continue dans le cloud.
+
 ## Prérequis
 
 Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gratuits de plusieurs fournisseurs. Ainsi, il vous faudra créer :
@@ -81,7 +87,7 @@ La fonctionnalité attendue est la suivante :
 
 1. Que pouvez-vous dire sur le fichier `package.json` ? Sur le fichier `package-lock.json` ?
 
-2. Installez avec `npm` la bibliothèque `systeminformation`. Quel impact cette opération a-t-elle sur votre dépôt git ? Dans `package.json`, quelle différence y a-t-il entre `dependencies` et `devDependencies` ?
+2. Installez avec `npm` la bibliothèque `systeminformation`. Quel impact cette opération a-t-elle sur votre dépôt Git ? Dans `package.json`, quelle différence y a-t-il entre `dependencies` et `devDependencies` ?
 
 3. Écrivez l'application. Un soixantaine de lignes de code sont suffisantes à son fonctionnement : ne cherchez pas à généraliser. Découpez votre code en quelques fonctions qui seront simples à tester par la suite. Quelles difficultés avez-vous rencontrées ?
 
@@ -92,10 +98,9 @@ La fonctionnalité attendue est la suivante :
     curl http://localhost:8000/api/v1/sysinfo
     ```
 
-4. Écrivez un jeu de test pour votre application, et vérifiez son exécution. Pourquoi écrit-on un tel jeu de tests ?
+4. Écrivez un jeu de test pour votre application avec Jest, et vérifiez son exécution. Pourquoi écrit-on un tel jeu de tests ?
 
-* https://docs.pact.io/5-minute-getting-started-guide/
-* https://github.com/pact-foundation/pact-js/blob/master/examples/typescript/test/get-dog.spec.ts
+5. *(Facultatif)* Écrivez un jeu de test pour votre application avec Pact. Le framework fournit un [guide de démarrage](https://docs.pact.io/5-minute-getting-started-guide/) et [un exemple en TypeScript](https://github.com/pact-foundation/pact-js/blob/master/examples/typescript/test/get-dog.spec.ts). Quelle(s) différence(s) identifiez-vous entre vos deux jeux de tests ?
 
 ## TD2 : conteneurisation avec Docker
 
