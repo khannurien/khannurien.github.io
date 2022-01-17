@@ -98,9 +98,9 @@ La fonctionnalité attendue est la suivante :
     curl http://localhost:8000/api/v1/sysinfo
     ```
 
-4. Écrivez un jeu de test pour votre application avec Jest, et vérifiez son exécution. Pourquoi écrit-on un tel jeu de tests ?
+4. Écrivez un jeu de tests pour votre application avec Jest, et vérifiez son exécution. Pourquoi écrit-on un tel jeu de tests ?
 
-5. *(Facultatif)* Écrivez un jeu de test pour votre application avec Pact. Le framework fournit un [guide de démarrage](https://docs.pact.io/5-minute-getting-started-guide/) et [un exemple en TypeScript](https://github.com/pact-foundation/pact-js/blob/master/examples/typescript/test/get-dog.spec.ts). Quelle(s) différence(s) identifiez-vous entre vos deux jeux de tests ?
+5. *(Facultatif)* Écrivez un jeu de tests pour votre application avec Pact. Le framework fournit un [guide de démarrage](https://docs.pact.io/5-minute-getting-started-guide/) et [un exemple en TypeScript](https://github.com/pact-foundation/pact-js/blob/master/examples/typescript/test/get-dog.spec.ts). Quelle(s) différence(s) identifiez-vous entre vos deux jeux de tests ?
 
 ## TD2 : conteneurisation avec Docker
 
