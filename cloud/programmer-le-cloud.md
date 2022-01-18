@@ -167,6 +167,9 @@ En voici une première : la base de tout conteneur Docker est un système d'expl
     # installation des paquets système
     RUN ...
 
+    # ajout utilisateur node et groupe node
+    RUN ...
+
     # downgrade des privilèges
     USER ...
 
