@@ -191,7 +191,7 @@ En voici une première : la base de tout conteneur Docker est un système d'expl
     sudo docker build -t sysinfo-api:0.0.1 .
     ```
 
-3. Créez un conteneur à partir de votre image. À quoi sert le flag `-p` ? Le flag `-m` ? Le flag `--cpus` ? Pour ces deux derniers, faîtes varier les valeurs pour constater leur impact sur la sortie de votre application.
+3. Créez un conteneur à partir de votre image. À quoi sert le flag `-p` ? Le flag `-m` ? Le flag `--cpus` ? Est-ce que faire varier leur valeur a un impact sur la sortie de votre application ? À votre avis, pourquoi ?
 
     ```shell
     sudo docker run -p 8123:8000 -m1024m --cpus=1 sysinfo-api:0.0.1
