@@ -215,6 +215,17 @@ En voici une première : la base de tout conteneur Docker est un système d'expl
 
 5. Modifiez votre `Dockerfile` pour réaliser une [construction *multi-stage*](https://docs.docker.com/develop/develop-images/multistage-build/) afin d'obtenir une image finale la plus légère possible, que vous taggerez à la version **0.0.2**. Cette image ne devra contenir que les dépendances nécessaires à l'exécution de votre application. Quel delta constatez-vous en termes de taille ? Quelle(s) conséquence(s) cela pourrait-il avoir dans le contexte d'une application réelle ?
 
+    ```Dockerfile
+    # stage compilation
+    FROM alpine:3.15 as builder
+    # ...
+
+    # stage exécution
+    FROM alpine:3.15 as runner
+    # ...
+    COPY --from=builder --chown=node:node ...
+    ```
+
 6. Vous allez maintenant pouvoir publier votre image Docker sur un dépôt (Docker Hub). Commencez par la tagger avec votre nom d'utilisateur (pas le mien :-)) :
 
     ```shell
