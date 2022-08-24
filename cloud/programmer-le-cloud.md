@@ -28,7 +28,7 @@ Pour développer localement, sur votre machine, il vous faudra installer :
 
 Les procédures d'installation seront données lorsque nécessaire, au fur et à mesure du sujet.
 
-N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Windows 10, le sous-système Linux pour Windows (*WSL*) est une bonne solution, en particulier car il fonctionne particulièrement bien avec l'IDE de Microsoft, Visual Studio Code :
+N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Windows 10, le sous-système Linux pour Windows (*WSL*) est une bonne solution, notamment car il fonctionne particulièrement bien avec l'IDE de Microsoft, Visual Studio Code :
 
 * [Installer WSL 2 -- Microsoft Docs](https://docs.microsoft.com/fr-fr/windows/wsl/install)
 
