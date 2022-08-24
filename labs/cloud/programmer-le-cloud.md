@@ -1,6 +1,6 @@
 ---
 title: Programmer le Cloud
-parent: Labs
+parent: Cloud
 ---
 
 # Programmer le Cloud
