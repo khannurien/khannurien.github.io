@@ -32,12 +32,15 @@ Vous restituerez ce mini-projet en produisant une archive contenant tous les fic
 
 ### Objectifs
 
-Ce premier TD ne concerne pas l'installation d'une distribution Linux "de bureau" que vous utiliseriez au quotidien sur votre machine. Notre cours adresse la question de l'*administration* d'un système Linux : nous allons mettre en place une machine virtuelle Linux qui fera office de *serveur*.
+Ce premier TD ne concerne pas l'installation d'une distribution Linux "de bureau" que vous utiliseriez au quotidien sur votre machine. Notre cours adresse la question de l'*administration* d'un système Linux : nous allons mettre en place une machine virtuelle (VM, pour *Virtual Machine*) Linux qui fera office de *serveur*.
 
-À l'issue du TD, vous aurez à votre disposition :
+![Half-filled server rack](./images/wip-server-racks.jpg "Half-filled server rack")
 
-* une machine virtuelle Ubuntu Server ;
-* un accès distant à celle-ci 
+[Alexis Lê-Quôc](https://commons.wikimedia.org/wiki/File:Half_filled_server_racks.jpg)
+
+Sur la photo ci-dessus, on voit une baie de serveurs. Les machines sont disposées ainsi dans un souci de minimiser leur encombrement et de faciliter leur refroidissement. On s'imagine mal devoir brancher claviers et écrans en cas d'intervention ! Pour cela, on accède au système *à distance*, grâce à un protocole célèbre : SSH (pour *Secure Shell*).
+
+Vous accéderez donc toujours via SSH à la machine virtuelle que vous allez déployer.
 
 ### Déroulé
 
@@ -51,12 +54,28 @@ TODO: VM, VirtualBox...
 
 #### Création de la VM
 
+TODO: image disque, disque virtuel...
+
 0. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server) :
+    * ...
+
+1. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton ![](./images/virtualbox/virtualbox-nouvelle.png) et suivez le guide :
+    * 2048 Mo de mémoire vive devraient suffire ;
+    * Choisissez de créer un *disque dur virtuel*, de type **VDI**, dynamiquement alloué avec une taille de départ de 10 Go.
+
+2. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.1-live-server-amd64.iso`.
+
+3. Si tout s'est bien passé, voici l'écran que vous devriez voir s'afficher :
+
+![](./images/virtualbox/virtualbox-grub.png)
 
 #### Installation de la VM
 
+TODO: captures d'écran
+
 ##### Partitionnement
 
+TODO: illustrations
 
 ## TD2 : configuration d'un serveur Linux
 
