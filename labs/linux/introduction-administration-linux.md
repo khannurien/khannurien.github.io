@@ -1,3 +1,8 @@
+---
+title: Introduction à l'administration Linux
+parent: Labs
+---
+
 # Introduction à l'administration Linux
 {: .no_toc }
 
@@ -15,7 +20,8 @@ Ce cours est l'occasion de vous initier au fonctionnement d'un système GNU/Linu
 Aucun, ou presque ! Quelques ressources pourront vous aider au cours du projet :
 
 * La documentation en français pour [un serveur sous Ubuntu](https://doc.ubuntu-fr.org/serveur). Certaines informations peuvent être un peu datées, mais elle a le mérite de couvrir un large éventail de sujets ;
-* Le [Ubuntu Server Guide](https://ubuntu.com/server/docs), en anglais, est écrit par Canonical, la société éditrice d'Ubuntu. N'hésitez pas à vous y référer, elle est à jour et très complète.
+* Le [Ubuntu Server Guide](https://ubuntu.com/server/docs), en anglais, est écrit par Canonical, la société éditrice d'Ubuntu. N'hésitez pas à vous y référer, elle est à jour et très complète ;
+* Le livre de Vincent Lozano, [*Tout ce que vous avez toujours voulu savoir Unix sans jamais oser le demander*](http://lozzone.free.fr/unix/guide-unix.pdf), est un manuel pour débutants très complet.
 
 ## Évaluation
 
@@ -71,6 +77,8 @@ TODO: VM, VirtualBox...
 * backups (script shell)
 
 ## TD4 : développement d'un script d'administration
+
+* https://unix.stackexchange.com/questions/4899/var-vs-var-and-to-quote-or-not-to-quote
 
 * Utiliser un template pour un [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038)
 * Lire l'article du créateur du script https://betterdev.blog/minimal-safe-bash-script-template/

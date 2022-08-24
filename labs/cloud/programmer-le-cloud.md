@@ -1,3 +1,8 @@
+---
+title: Programmer le Cloud
+parent: Labs
+---
+
 # Programmer le Cloud
 {: .no_toc }
 
