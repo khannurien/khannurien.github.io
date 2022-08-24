@@ -1,6 +1,7 @@
 ---
 title: Introduction à l'administration Linux
 parent: Linux
+grand_parent: Labs
 ---
 
 # Introduction à l'administration Linux
