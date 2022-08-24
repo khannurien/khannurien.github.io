@@ -38,7 +38,7 @@ Ce premier TD ne concerne pas l'installation d'une distribution Linux "de bureau
 
 [Alexis Lê-Quôc](https://commons.wikimedia.org/wiki/File:Half_filled_server_racks.jpg)
 
-Sur la photo ci-dessus, on voit une baie de serveurs. Les machines sont disposées ainsi dans un souci de minimiser leur encombrement et de faciliter leur refroidissement. On s'imagine mal devoir brancher claviers et écrans en cas d'intervention ! Pour cela, on accède au système *à distance*, grâce à un protocole célèbre : SSH (pour *Secure Shell*).
+Sur la photo ci-dessus, on voit une baie de serveurs en cours de montage. Les machines sont disposées ainsi dans un souci de minimiser leur encombrement et de faciliter leur refroidissement. On s'imagine mal devoir brancher claviers et écrans en cas d'intervention ! Pour cela, on accède au système *à distance*, grâce à un protocole célèbre : SSH (pour *Secure Shell*).
 
 Vous accéderez donc toujours via SSH à la machine virtuelle que vous allez déployer.
 
@@ -69,13 +69,53 @@ TODO: image disque, disque virtuel...
 
 ![](./images/virtualbox/virtualbox-grub.png)
 
+C'est le chargeur d'armoçage, *GRUB*. Vous pouvez valider le choix *Try or Install Ubuntu Server* et poursuivre le démarrage de l'OS.
+
 #### Installation de la VM
 
-TODO: captures d'écran
+Vous allez pouvoir vous lancer dans l'installation du système à proprement parler. Un assistant va vous guider tout au long de la procédure : vous pouvez utiliser les flèches du clavier et la touche de tabulation <kbd>↹</kbd> pour naviguer entre les boutons et les écrans.
+
+1. Choisissez la langue et la disposition du clavier de votre choix. Si vous utilisez un clavier Azerty, la disposition à choisir est "French".
+
+2. Le type d'installation à sélectionner est *Ubuntu Server (**minimized**)* :
+
+![](./images/virtualbox/virtualbox-server-minimized.png)
+
+3. La connexion au réseau devrait s'effectuer d'elle-même. Vous n'avez pas besoin de préciser d'adresse de proxy. L'adresse du miroir d'archive Ubuntu est correcte par défaut.
+
+4. Vous arrivez à l'étape de configuration du stockage. Sélectionnez "Custom storage layout" :
+
+![](./images/virtualbox/virtualbox-server-storage.png)
 
 ##### Partitionnement
 
-TODO: illustrations
+1. Créez deux partitions : une pour la racine du système de fichiers, et une pour les répertoires utilisateur. Chacune prendra la moitié de l'espace disque total. Formatez-les avec le système de fichiers `ext4`.
+
+![](./images/virtualbox/virtualbox-server-partitions-1.png)
+
+2. Faîtes une capture d'écran du schéma de partitionnement final et ajoutez-la à votre compte-rendu.
+
+À votre avis, à quoi sert de partitionner le disque sur lequel on installe un système ? En un court paragraphe, proposez une réponse dans votre compte-rendu.
+
+##### Serveur SSH
+
+L'assistant d'installation vous demandera ensuite des informations sur votre profil et le nom de la machine.
+
+À l'étape suivante, on vous propose d'installer le serveur OpenSSH. C'est ce service qui vous permettra d'accéder à distance à votre machine.
+
+![](./images/virtualbox/virtualbox-server-ssh.png)
+
+Si vous avez déjà un jeu de clefs SSH, vous pouvez les importer. Sinon, vous vous connecterez avec votre identifiant et votre mot de passe.
+
+Qu'est-ce que sont ces clefs ? À quoi servent-elles ? En un court paragraphe, proposez une réponse dans votre compte-rendu.
+
+##### Finalisation
+
+La dernière étape vous propose une liste de paquets suggérés : n'en sélectionnez aucun et poursuivez jusqu'à la fin de l'installation d'Ubuntu.
+
+![](./images/virtualbox/virtualbox-server-finished.png)
+
+Lorsque c'est fini, vous pouvez choisir de "Redémarrer maintenant".
 
 ## TD2 : configuration d'un serveur Linux
 
