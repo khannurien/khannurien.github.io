@@ -1,7 +1,7 @@
 ---
 title: Linux
 has_children: true
-nav_exclude: true
+parent: Labs
 ---
 
 # Linux

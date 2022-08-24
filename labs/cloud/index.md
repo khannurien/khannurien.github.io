@@ -1,7 +1,7 @@
 ---
 title: Cloud
 has_children: true
-nav_exclude: true
+parent: Labs
 ---
 
 # Cloud
