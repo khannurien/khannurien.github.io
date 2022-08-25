@@ -67,11 +67,14 @@ Il existe deux abstractions pour un hyperviseur :
 
 #### Création de la VM
 
-TODO: image disque, disque virtuel...
+Deux notions sont importantes pour cette étape :
+
+* Image disque : un fichier, souvent d'extension `.iso` ou `.img`, qui représente un média amorçable (*bootable*) que l'on pourrait copier sur un disque flash par exemple. Il contient un chargeur d'amorçage et un système d'exploitation. Ces images disques sont utilisées pour installer un nouvel OS sur une machine, physique ou virtuelle ;
+* Disque virtuel : un fichier, souvent d'extension `.vdi`, qui représente le disque d'amorçage d'un système d'exploitation.
 
 1. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server).
 
-2. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton ![](./images/virtualbox/virtualbox-nouvelle.png) et suivez le guide :
+2. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton "Nouvelle" et suivez le guide :
     * 2048 Mo de mémoire vive devraient suffire ;
     * Choisissez de créer un *disque dur virtuel*, de type **VDI**, dynamiquement alloué avec une taille de départ de 10 Go.
 
