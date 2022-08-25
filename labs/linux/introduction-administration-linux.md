@@ -38,7 +38,9 @@ TODO: ...
 
 ### Déroulé
 
-Si vous n'avez pas de shell Bash à disposition, vous pouvez utiliser un shell en ligne, comme proposé par [replit](https://replit.com/languages/bash) ou [OnlineGDB](https://www.onlinegdb.com/online_bash_shell). Vous pouvez également activer [WSL2](https://docs.microsoft.com/fr-fr/windows/wsl/install) ou installer [Git Bash](https://git-scm.com/downloads) pour Windows.
+Si vous n'avez pas de shell Bash à disposition, vous pouvez utiliser un shell en ligne, comme proposé par [replit](https://replit.com/languages/bash) ou [OnlineGDB](https://www.onlinegdb.com/online_bash_shell).
+
+Sur votre machine, si vous utilisez Windows, vous pouvez également activer [WSL2](https://docs.microsoft.com/fr-fr/windows/wsl/install) ou installer [Git Bash](https://git-scm.com/downloads).
 
 Reportez vos réponses au fur et à mesure dans votre compte-rendu, et n'oubliez pas de sauvegarder votre travail !
 
@@ -157,6 +159,9 @@ TODO: Service de base : serveur web
 TODO: NAT pour les ports avec VirtualBox
 
 ### Déroulé
+
+* architecture client/serveur
+* serveur écoute sur un port, en attente de connexion de la part d'un client
 
 * ouverture de port pour SSH
 
