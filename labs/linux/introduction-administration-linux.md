@@ -28,6 +28,8 @@ Aucun, ou presque ! Quelques ressources pourront vous aider au cours du projet :
 
 Vous restituerez ce mini-projet en produisant une archive contenant tous les fichiers que vous jugerez utile de fournir, ainsi qu'un compte-rendu comportant vos réponses aux questions qui seront posées tout au long du sujet, et toute remarque ou commentaire que vous souhaiteriez ajouter.
 
+🔎 Les paragraphes précédés de ce symbole vous invitent à faire des recherches rapides pour compléter votre réponse.
+
 ## TD1 : installation du système
 
 ### Objectifs
@@ -46,32 +48,42 @@ Vous accéderez donc toujours via SSH à la machine virtuelle que vous allez dé
 
 #### Installation de VirtualBox
 
-TODO: VM, VirtualBox...
+Créer des machines virtuelles, c'est virtualiser les ressources physiques du système hôte, pour les partager entre des systèmes invités. Ce type de virtualisation est assisté par le matériel, qui fournit les fonctionnalités d'isolation requises pour assurer l'étanchéité entre les VM.
 
-0. Installez [VirtualBox](https://www.virtualbox.org/wiki/Downloads) :
-    * *Platform package*: ... ;
-    * *VirtualBox Extension Pack*: ... ;
+Cela permet de faire fonctionner, sur une même machine (l'hôte), de nombreux systèmes d'exploitation (invités) complets et hétérogènes, de manière indépendante, sur des ressources matérielles partagées.
+
+Du point de vue d'une machine virtuelle, son environnement d'exécution est perçu comme une plateforme à part entière -- alors qu'il est en réalité un sous-ensemble des ressources matérielles de la plateforme hôte. Ce sous-ensemble est créé et géré par un *hyperviseur* (ou *VMM*, pour *Virtual Machine Manager*), un logiciel de bas niveau qui peut être exécuté en tant que système d'exploitation, ou comme un processus géré par le système d'exploitation hôte.
+
+L'hyperviseur a pour responsabilité la gestion du cycle de vie des machines virtuelles : création, exécution, destruction et parfois migration des VM sont assurées par l'hyperviseur.
+
+Il existe deux abstractions pour un hyperviseur :
+
+* Type-1 (*bare-metal hypervisors*) : ces hyperviseurs fonctionnent à même le matériel de la machine hôte, sans l'intervention d'un système d'exploitation -- on peut considérer qu'ils sont eux-mêmes une forme de système d'exploitation. L'absence d'OS hôte entre le matériel et l'hyperviseur garantit une sécurité supérieure (la surface d'attaque est réduite) et de meilleures performances (moins d'indirection). Parmi les hyperviseurs type-1 de référence, on trouve VMware ESXi, KVM, Xen ou Hyper-V ;
+* Type-2 (*hosted hypervisors*) : ces hyperviseurs s'exécutent en tant que processus d'un système d'exploitation hôte tel que Linux ou Windows. Ce sont des produits dédiés aux consommateurs finaux (nous !), qui leur permettent de manipuler des systèmes d'exploitation hétérogènes sur une même machine hôte. Les plus célèbres sont QEMU et VirtualBox.
+
+![](./images/hypervisors.png)
+
+1. Installez [VirtualBox](https://www.virtualbox.org/wiki/Downloads) : choisissez le *Platform package* adapté à votre système hôte.
 
 #### Création de la VM
 
 TODO: image disque, disque virtuel...
 
-0. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server) :
-    * ...
+1. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server).
 
-1. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton ![](./images/virtualbox/virtualbox-nouvelle.png) et suivez le guide :
+2. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton ![](./images/virtualbox/virtualbox-nouvelle.png) et suivez le guide :
     * 2048 Mo de mémoire vive devraient suffire ;
     * Choisissez de créer un *disque dur virtuel*, de type **VDI**, dynamiquement alloué avec une taille de départ de 10 Go.
 
-2. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.1-live-server-amd64.iso`.
+3. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.1-live-server-amd64.iso`.
 
-3. Si tout s'est bien passé, voici l'écran que vous devriez voir s'afficher :
+4. Si tout s'est bien passé, voici l'écran que vous devriez voir s'afficher :
 
 ![](./images/virtualbox/virtualbox-grub.png)
 
 C'est le chargeur d'armoçage, *GRUB*. Vous pouvez valider le choix *Try or Install Ubuntu Server* et poursuivre le démarrage de l'OS.
 
-#### Installation de la VM
+#### Installation d'Ubuntu Server
 
 Vous allez pouvoir vous lancer dans l'installation du système à proprement parler. Un assistant va vous guider tout au long de la procédure : vous pouvez utiliser les flèches du clavier et la touche de tabulation <kbd>↹</kbd> pour naviguer entre les boutons et les écrans.
 
@@ -95,7 +107,7 @@ Vous allez pouvoir vous lancer dans l'installation du système à proprement par
 
 2. Faîtes une capture d'écran du schéma de partitionnement final et ajoutez-la à votre compte-rendu.
 
-À votre avis, à quoi sert de partitionner le disque sur lequel on installe un système ? En un court paragraphe, proposez une réponse dans votre compte-rendu.
+🔎 À votre avis, à quoi sert de partitionner le disque sur lequel on installe un système ? En un court paragraphe, proposez une réponse dans votre compte-rendu.
 
 ##### Serveur SSH
 
@@ -107,7 +119,7 @@ L'assistant d'installation vous demandera ensuite des informations sur votre pro
 
 Si vous avez déjà un jeu de clefs SSH, vous pouvez les importer. Sinon, vous vous connecterez avec votre identifiant et votre mot de passe.
 
-Qu'est-ce que sont ces clefs ? À quoi servent-elles ? En un court paragraphe, proposez une réponse dans votre compte-rendu.
+🔎 Qu'est-ce que sont ces clefs ? À quoi servent-elles ? En un court paragraphe, proposez une réponse dans votre compte-rendu.
 
 ##### Finalisation
 
@@ -121,25 +133,53 @@ Lorsque c'est fini, vous pouvez choisir de "Redémarrer maintenant".
 
 ### Objectifs
 
+TODO: Service de base : serveur web
+
+TODO: NAT pour les ports avec VirtualBox
+
 ### Déroulé
 
-* serveur SSH
-  * NAT
-* contrôle à distance
+* serveur web
+  * configuration nginx
+
+* logwatch
+  * configuration pour nginx
+
+#### Installation d'un paquet
+
+`logwatch`
+
+```
+sudo apt update
+sudo apt dist-upgrade
+sudo apt install logwatch
+```
+
+logwatch + nginx
 
 ## TD3 : introduction à l'automatisation
 
 ### Objectifs
 
+TODO: Script shell...
+
+TODO: Création de backups...
+
+TODO: Extraction de backups...
+
 ### Déroulé
 
-* VSCode remote + shellcheck
-* backups (script shell)
+1. TODO: VSCode remote + shellcheck
 
 ## TD4 : développement d'un script d'administration
+
+### Objectifs
+
+TODO: Fonctionnalités attendues...
+
+TODO: Idempotence...
 
 * https://unix.stackexchange.com/questions/4899/var-vs-var-and-to-quote-or-not-to-quote
 
 * Utiliser un template pour un [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038)
 * Lire l'article du créateur du script https://betterdev.blog/minimal-safe-bash-script-template/
-
