@@ -30,6 +30,20 @@ Vous restituerez ce mini-projet en produisant une archive contenant tous les fic
 
 🔎 Les paragraphes précédés de ce symbole vous invitent à faire des recherches rapides pour compléter votre réponse.
 
+## TD0 : le shell Bash
+
+### Objectifs
+
+TODO: ...
+
+### Déroulé
+
+Si vous n'avez pas de shell Bash à disposition, vous pouvez utiliser un shell en ligne, comme proposé par [replit](https://replit.com/languages/bash) ou [OnlineGDB](https://www.onlinegdb.com/online_bash_shell). Vous pouvez également activer [WSL2](https://docs.microsoft.com/fr-fr/windows/wsl/install) ou installer [Git Bash](https://git-scm.com/downloads) pour Windows.
+
+Reportez vos réponses au fur et à mesure dans votre compte-rendu, et n'oubliez pas de sauvegarder votre travail !
+
+1. 
+
 ## TD1 : installation du système
 
 ### Objectifs
@@ -136,14 +150,41 @@ Lorsque c'est fini, vous pouvez choisir de "Redémarrer maintenant".
 
 ### Objectifs
 
+Cette seconde partie va nous permettre d'aborder les questions de réseau et de services.
+
 TODO: Service de base : serveur web
 
 TODO: NAT pour les ports avec VirtualBox
 
 ### Déroulé
 
+* ouverture de port pour SSH
+
+![](images/virtualbox/virtualbox-ssh-nat.png)
+
+Pour accéder à votre machine virtuelle *via* son serveur SSH, il vous faut un... client SSH. Puisque les étapes suivantes du projet consistent à développer des scripts Bash, nous allons utiliser un IDE (*Integrated Development Environment*) livré avec un terminal et un client SSH.
+
+1. Si vous ne l'avez pas déjà installé, [Visual Studio Code](https://code.visualstudio.com/) est un excellent IDE, développé par Microsoft. Récupérez VSCode et exécutez-le sur votre machine.
+
+2. VSCode est un IDE *modulaire* : cela signifie que de nombreuses fonctionnalités sont accessibles via l'installation d'*extensions*. Microsoft propose une extension *Remote - SSH* qui permet de se connecter à une machine *via* SSH pour y travailler à distance. Installez l'extension :
+
+![](./images/vscode/vscode-remote-extension.png)
+
+3. Connectez-vous à votre machine virtuelle :
+
+![](./images/vscode/vscode-remote-host.png)
+
+4. Rentrez le mot de passe de votre utilisateur :
+
+![](./images/vscode/vscode-remote-password.png)
+
+5. Ouvrez un répertoire pour commencer à travailler :
+
+![](./images/vscode/vscode-remote-folder.png)
+
 * serveur web
   * configuration nginx
+  * ouverture de port
 
 * logwatch
   * configuration pour nginx
