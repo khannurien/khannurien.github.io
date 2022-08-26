@@ -7,6 +7,22 @@ grand_parent: Labs
 # Introduction à l'administration Linux
 {: .no_toc }
 
+> Hello everybody out there using minix -
+> 
+> I'm doing a (free) operating system (just a hobby, won't be big and
+> professional like gnu) for 386(486) AT clones. This has been brewing
+> since april, and is starting to get ready. I'd like any feedback on
+> things people like/dislike in minix, as my OS resembles it somewhat
+> (same physical layout of the file-system (due to practical reasons)
+> among other things).
+> 
+> I've currently ported bash(1.08) and gcc(1.40), and things seem to work.
+> This implies that I'll get something practical within a few months, and
+> I'd like to know what features most people would want. Any suggestions
+> are welcome, but I won't promise I'll implement them :-)
+> 
+> Linus
+
 1. TOC
 {:toc}
 
@@ -34,17 +50,51 @@ Vous restituerez ce mini-projet en produisant une archive contenant tous les fic
 
 ### Objectifs
 
-TODO: ...
+Ces exercices ont pour objet de vous familiariser avec l'usage du shell. La ligne de commande a de nombreux avantages : uniformité des commandes, flexibilité, répétabilité, accès à distance et automatisation... Mais tout a un prix ! En contrepartie, il faut apprendre et mémoriser les commandes essentielles. Seule la pratique vous permettra d'être efficace face à un shell.
 
 ### Déroulé
 
-Si vous n'avez pas de shell Bash à disposition, vous pouvez utiliser un shell en ligne, comme proposé par [replit](https://replit.com/languages/bash) ou [OnlineGDB](https://www.onlinegdb.com/online_bash_shell).
+Si vous n'avez pas de shell Bash à disposition, vous pouvez utiliser un shell en ligne, comme proposé par [replit](https://replit.com/languages/bash) ou [OnlineGDB](https://www.onlinegdb.com/online_bash_shell). Attention, votre session sera **temporaire** et vous ne retrouverez pas votre travail à la prochaine connexion.
 
 Sur votre machine, si vous utilisez Windows, vous pouvez également activer [WSL2](https://docs.microsoft.com/fr-fr/windows/wsl/install) ou installer [Git Bash](https://git-scm.com/downloads).
 
 Reportez vos réponses au fur et à mesure dans votre compte-rendu, et n'oubliez pas de sauvegarder votre travail !
 
-1. 
+🔎 Prévoyez dans le compte-rendu une section "mémento" dans laquelle vous listerez toutes les commandes que vous utiliserez, avec une courte phrase explicative pour chacune d'entre elles. Pour obtenir des informations sur une commande, votre réflexe doit être `man`. Par exemple, pour afficher le manuel de la commande `ls`, on tape :
+
+```bash
+man ls
+```
+
+Et on obtient :
+
+![](./images/man-ls.png)
+
+Parfois, ces pages de manuel ne fournissent pas d'exemple d'utilisation d'une commande. Il existe une base de données communautaire pour cela, [tldr.sh](https://tldr.sh/).
+
+Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `cat`, `cd`, `echo`, `grep`, `ls`, `mkdir`, `pwd`, `touch`, `wc`. 
+
+1. Quel est votre nom d'utilisateur ? Affichez la valeur de la variable `$USER`.
+2. Identifiez le répertoire dans lequel vous vous situez au démarrage de votre shell.
+3. Créez un répertoire `exercices` dans votre répertoire utilisateur (*home*, en anglais). Pour cela, utilisez la variable `$HOME`.
+4. Déplacez-vous dans ce répertoire.
+5. Créez un fichier `ex1.txt`.
+6. Dans ce fichier, sans utiliser d'éditeur de texte ([indice](https://en.wikipedia.org/wiki/Here_document) : vous allez utiliser une redirection), écrivez le texte suivant :
+
+    > The quick brown fox jumps over the lazy dog.
+    > Waltz, bad nymph, for quick jigs vex.
+    > Glib jocks quiz nymph to vex dwarf.
+    > Sphinx of black quartz, judge my vow.
+    > How vexingly quick daft zebras jump!
+    > The five boxing wizards jump quickly.
+    > Jackdaws love my big sphinx of quartz.
+
+7. Ajoutez la ligne suivante au fichier :
+
+    > Pack my box with five dozen liquor jugs.
+
+8.  Affichez le contenu du fichier.
+9.  Comptez le nombre d'occurrences du mot `quick` ([indice](https://en.wikipedia.org/wiki/Pipeline_(Unix)) : vous allez chaîner deux commandes).
 
 ## TD1 : installation du système
 
@@ -98,7 +148,7 @@ Deux notions sont importantes pour cette étape :
 
 4. Si tout s'est bien passé, voici l'écran que vous devriez voir s'afficher :
 
-![](./images/virtualbox/virtualbox-grub.png)
+    ![](./images/virtualbox/virtualbox-grub.png)
 
 C'est le chargeur d'armoçage, *GRUB*. Vous pouvez valider le choix *Try or Install Ubuntu Server* et poursuivre le démarrage de l'OS.
 
@@ -110,19 +160,19 @@ Vous allez pouvoir vous lancer dans l'installation du système à proprement par
 
 2. Le type d'installation à sélectionner est *Ubuntu Server (**minimized**)* :
 
-![](./images/virtualbox/virtualbox-server-minimized.png)
+    ![](./images/virtualbox/virtualbox-server-minimized.png)
 
 3. La connexion au réseau devrait s'effectuer d'elle-même. Vous n'avez pas besoin de préciser d'adresse de proxy. L'adresse du miroir d'archive Ubuntu est correcte par défaut.
 
 4. Vous arrivez à l'étape de configuration du stockage. Sélectionnez "Custom storage layout" :
 
-![](./images/virtualbox/virtualbox-server-storage.png)
+    ![](./images/virtualbox/virtualbox-server-storage.png)
 
 ##### Partitionnement
 
 1. Créez deux partitions : une pour la racine du système de fichiers, et une pour les répertoires utilisateur. Chacune prendra la moitié de l'espace disque total. Formatez-les avec le système de fichiers `ext4`.
 
-![](./images/virtualbox/virtualbox-server-partitions-1.png)
+    ![](./images/virtualbox/virtualbox-server-partitions-1.png)
 
 2. Faîtes une capture d'écran du schéma de partitionnement final et ajoutez-la à votre compte-rendu.
 
@@ -173,19 +223,19 @@ Pour accéder à votre machine virtuelle *via* son serveur SSH, il vous faut un.
 
 2. VSCode est un IDE *modulaire* : cela signifie que de nombreuses fonctionnalités sont accessibles via l'installation d'*extensions*. Microsoft propose une extension *Remote - SSH* qui permet de se connecter à une machine *via* SSH pour y travailler à distance. Installez l'extension :
 
-![](./images/vscode/vscode-remote-extension.png)
+    ![](./images/vscode/vscode-remote-extension.png)
 
 3. Connectez-vous à votre machine virtuelle :
 
-![](./images/vscode/vscode-remote-host.png)
+    ![](./images/vscode/vscode-remote-host.png)
 
 4. Rentrez le mot de passe de votre utilisateur :
 
-![](./images/vscode/vscode-remote-password.png)
+    ![](./images/vscode/vscode-remote-password.png)
 
 5. Ouvrez un répertoire pour commencer à travailler :
 
-![](./images/vscode/vscode-remote-folder.png)
+    ![](./images/vscode/vscode-remote-folder.png)
 
 * serveur web
   * configuration nginx
