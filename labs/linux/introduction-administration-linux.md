@@ -78,23 +78,27 @@ Pour vous aider à démarrer, voici une liste des commandes que vous allez devoi
 2. Identifiez le répertoire dans lequel vous vous situez au démarrage de votre shell.
 3. Créez un répertoire `exercices` dans votre répertoire utilisateur (*home*, en anglais). Pour cela, utilisez la variable `$HOME`.
 4. Déplacez-vous dans ce répertoire.
-5. Créez un fichier `ex1.txt`.
-6. Dans ce fichier, sans utiliser d'éditeur de texte ([indice](https://en.wikipedia.org/wiki/Here_document) : vous allez utiliser une redirection), écrivez le texte suivant :
+5. Créez un fichier `exercices.txt`.
+6. Dans ce fichier, sans utiliser d'éditeur de texte ([indice](https://en.wikipedia.org/wiki/Here_document) : vous allez utiliser une redirection), écrivez les [pangrammes](https://fr.wikipedia.org/wiki/Pangramme) suivant :
 
-    > The quick brown fox jumps over the lazy dog.
-    > Waltz, bad nymph, for quick jigs vex.
-    > Glib jocks quiz nymph to vex dwarf.
-    > Sphinx of black quartz, judge my vow.
-    > How vexingly quick daft zebras jump!
-    > The five boxing wizards jump quickly.
-    > Jackdaws love my big sphinx of quartz.
+    > The quick brown fox jumps over the lazy dog.  
+    > Waltz, bad nymph, for quick jigs vex.  
+    > Glib jocks quiz nymph to vex dwarf.  
+    > Sphinx of black quartz, judge my vow.  
+    > Sphinx of black quartz, judge my vow.  
+    > How vexingly quick daft zebras jump!  
+    > The five boxing wizards jump quickly.  
+    > Jackdaws love my big sphinx of quartz.  
+    > Pack my box with five dozen liquor jugs.
 
 7. Ajoutez la ligne suivante au fichier :
 
     > Pack my box with five dozen liquor jugs.
 
 8.  Affichez le contenu du fichier.
-9.  Comptez le nombre d'occurrences du mot `quick` ([indice](https://en.wikipedia.org/wiki/Pipeline_(Unix)) : vous allez chaîner deux commandes).
+9.  Comptez le nombre de pangrammes que contient le fichier.
+10. Comptez le nombre d'occurrences du mot `quick` ([indice](https://en.wikipedia.org/wiki/Pipeline_(Unix)) : vous allez chaîner deux commandes).
+11. Un pangramme apparaît en double dans le fichier. Dans une même commande, triez les pangrammes par ordre alphabétique (sur leur première lettre), débarrassez-vous du doublon, et écrivez le résultat dans un nouveau fichier `pangrammes.txt`.
 
 ## TD1 : installation du système
 
