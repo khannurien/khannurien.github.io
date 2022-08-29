@@ -216,20 +216,39 @@ Lorsque c'est fini, vous pouvez choisir de "Redémarrer maintenant".
 
 Cette seconde partie va nous permettre d'aborder les questions de réseau et de services.
 
-TODO: Service de base : serveur web
-
-TODO: NAT pour les ports avec VirtualBox
+À l'issue de ce TD, vous aurez configuré un accès distant à votre machine virtuelle. Votre système hébergera un serveur web.
 
 ### Déroulé
 
-* architecture client/serveur
-* serveur écoute sur un port, en attente de connexion de la part d'un client
+#### Réseau virtuel et règles du pare-feu
 
-* ouverture de port pour SSH
+Pour accéder à votre machine virtuelle *via* son serveur SSH, il vous faut un... client SSH.
 
-![](images/virtualbox/virtualbox-ssh-nat.png)
+SSH est un ensemble de logiciels qui fonctionnent selon le modèle *client/serveur* :
+* sur la machine distante (ici, votre VM), un *serveur* SSH est démarré, en attente d'une connexion. On dit qu'il *écoute* sur une **adresse**, à un **port** donné ;
+* sur la machine locale (ici, votre système hôte), un *client* SSH contacte la machine distante de la manière suivante :
 
-Pour accéder à votre machine virtuelle *via* son serveur SSH, il vous faut un... client SSH. Puisque les étapes suivantes du projet consistent à développer des scripts Bash, nous allons utiliser un IDE (*Integrated Development Environment*) livré avec un terminal et un client SSH.
+```bash
+ssh -p 22 utilisateur@10.0.0.1
+```
+
+On spécifie l'adresse du serveur SSH (ici, `10.0.0.1`) et le port sur lequel il écoute (ici, `22`, le port par défaut pour SSH). Linux est un système multi-utilisateurs, on spécifie donc l'identifiant avec lequel on souhaite se connecter.
+
+Votre machine distante est connectée à un réseau virtuel géré par VirtualBox. Entre votre système hôte et votre VM, on trouve un pare-feu qui filtre les connexions entrantes :
+
+![](./images/virtualbox/virtualbox-virtual-network.png)
+
+Nous allons créer une *règle* dans ce pare-feu pour autoriser les connexions au serveur SSH de votre VM :
+
+1. Depuis l'accueil de VirtualBox, faîtes un clic droit sur votre VM et cliquez sur "Configuration".
+2. Ouvrez l'onglet "Réseau". Chaque VM peut avoir jusqu'à quatre interfaces réseau. Seule la première nous intéresse ici.
+3. Déroulez les paramètres avancés et cliquez sur "Redirection de ports". Créez la règle suivante :
+
+    ![](./images/virtualbox/virtualbox-ssh-nat.png)
+
+#### Connexion SSH à la VM depuis votre système hôte
+
+Puisque les étapes suivantes du projet consistent à développer des scripts Bash, nous allons utiliser un IDE (*Integrated Development Environment*) livré avec un terminal et un client SSH.
 
 1. Si vous ne l'avez pas déjà installé, [Visual Studio Code](https://code.visualstudio.com/) est un excellent IDE, développé par Microsoft. Récupérez VSCode et exécutez-le sur votre machine.
 
@@ -249,14 +268,16 @@ Pour accéder à votre machine virtuelle *via* son serveur SSH, il vous faut un.
 
     ![](./images/vscode/vscode-remote-folder.png)
 
+#### Installation d'un paquet
+
 * serveur web
   * configuration nginx
   * ouverture de port
 
+#### Surveillance des journaux système
+
 * logwatch
   * configuration pour nginx
-
-#### Installation d'un paquet
 
 `logwatch`
 
@@ -265,8 +286,6 @@ sudo apt update
 sudo apt dist-upgrade
 sudo apt install logwatch
 ```
-
-logwatch + nginx
 
 ## TD3 : introduction à l'automatisation
 
@@ -282,6 +301,8 @@ TODO: Extraction de backups...
 
 1. TODO: VSCode remote + shellcheck
 
+🔎 Lorsque `shellcheck` vous remonte un avertissement ou une erreur, reportez-le dans votre compte rendu et expliquez comment vous l'avez traité et résolu.
+
 ## TD4 : développement d'un script d'administration
 
 ### Objectifs
@@ -290,7 +311,7 @@ TODO: Fonctionnalités attendues...
 
 TODO: Idempotence...
 
-* https://unix.stackexchange.com/questions/4899/var-vs-var-and-to-quote-or-not-to-quote
+### Déroulé
 
 * Utiliser un template pour un [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038)
 * Lire l'article du créateur du script https://betterdev.blog/minimal-safe-bash-script-template/
