@@ -72,7 +72,7 @@ Et on obtient :
 
 Parfois, ces pages de manuel ne fournissent pas d'exemple d'utilisation d'une commande. Il existe une base de données communautaire pour cela, [tldr.sh](https://tldr.sh/).
 
-Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `base64`, `cat`, `cd`, `echo`, `grep`, `ls`, `mkdir`, `pwd`, `sort`, `touch`, `uniq`, `wc`.
+Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `base64`, `cat`, `cd`, `cp`, `diff`, `du`, `echo`, `grep`, `ls`, `mv`, `pwd`, `rm`, `sort`, `tar`, `touch`, `uniq`, `wc`.
 
 1. Quel est votre nom d'utilisateur ? Affichez la valeur de la variable d'environnement `$USER`.
 2. Identifiez le répertoire dans lequel vous vous situez au démarrage de votre shell.
@@ -101,12 +101,19 @@ Pour vous aider à démarrer, voici une liste des commandes que vous allez devoi
 12. Comptez le nombre de pangrammes que contient le fichier.
 13. Comptez le nombre d'occurrences du mot `quick` ([indice](https://en.wikipedia.org/wiki/Pipeline_(Unix)) : vous allez chaîner deux commandes). Attention, `quickly` ne doit pas être compté !
 14. Un pangramme apparaît en double dans le fichier. Dans une même commande, triez les pangrammes par ordre alphabétique (sur leur première lettre), débarrassez-vous du doublon, et écrivez le résultat dans un nouveau fichier `pangrammes.txt`.
-15. Le texte suivant est codé. Trouvez comment lui redonner sens :
+15. Supprimez le fichier `exercices.txt`. Renommez le fichier `pangrammes.txt` en `td0.txt`.
+16. Affichez les différences entre `exercices.txt` et `pangrammes.txt`. Redirigez le résumé de ces différences dans un fichier `diff.txt`.
+17. Le texte suivant est codé. Trouvez comment lui redonner sens. La sortie de la commande sera sauvegardée dans un fichier `decode.txt` :
 
     > TmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXAKTmV2ZXIgZ29ubmEgbGV0IHlvdSBkb3duCk5ldmVyIGdv  
     > bm5hIHJ1biBhcm91bmQgYW5kIGRlc2VydCB5b3UKTmV2ZXIgZ29ubmEgbWFrZSB5b3UgY3J5Ck5l  
     > dmVyIGdvbm5hIHNheSBnb29kYnllCk5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91  
     > Cg==
+
+18. Copiez votre répertoire `exercices` et donnez le nom `td0`.
+19. Créez une archive `td0.tar` contenant votre répertoire `td0`.
+20. Combien d'octets pèse cette archive ? Combien d'octets pèse le répertoire `td0` ?
+21. Une fois l'archive créée, supprimez le répertoire `exercices`. **Attention** : relisez bien votre commande avant de l'exécuter, car il n'y a pas d'annulation possible.
 
 ## TD1 : installation du système
 
@@ -264,7 +271,7 @@ Puisque les étapes suivantes du projet consistent à développer des scripts Ba
 
     ![](./images/vscode/vscode-remote-password.png)
 
-5. Ouvrez un répertoire pour commencer à travailler :
+5. Créez un répertoire pour vos travaux grâce au terminal (s'il n'est pas ouvert par défaut, passez par le menu : *Terminal > Nouveau terminal*). Ouvrez ce répertoire dans VSCode pour commencer à travailler :
 
     ![](./images/vscode/vscode-remote-folder.png)
 
@@ -307,9 +314,14 @@ TODO: Extraction de backups...
 
 ### Objectifs
 
-TODO: Fonctionnalités attendues...
+#### Fonctionnalités attendues...
 
-TODO: Idempotence...
+#### Qualité du code
+
+Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord 
+
+* idempotence ;
+* 
 
 ### Déroulé
 
