@@ -72,14 +72,17 @@ Et on obtient :
 
 Parfois, ces pages de manuel ne fournissent pas d'exemple d'utilisation d'une commande. Il existe une base de données communautaire pour cela, [tldr.sh](https://tldr.sh/).
 
-Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `cat`, `cd`, `echo`, `grep`, `ls`, `mkdir`, `pwd`, `touch`, `wc`. 
+Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `base64`, `cat`, `cd`, `echo`, `grep`, `ls`, `mkdir`, `pwd`, `sort`, `touch`, `uniq`, `wc`.
 
-1. Quel est votre nom d'utilisateur ? Affichez la valeur de la variable `$USER`.
+1. Quel est votre nom d'utilisateur ? Affichez la valeur de la variable d'environnement `$USER`.
 2. Identifiez le répertoire dans lequel vous vous situez au démarrage de votre shell.
-3. Créez un répertoire `exercices` dans votre répertoire utilisateur (*home*, en anglais). Pour cela, utilisez la variable `$HOME`.
-4. Déplacez-vous dans ce répertoire.
-5. Créez un fichier `exercices.txt`.
-6. Dans ce fichier, sans utiliser d'éditeur de texte ([indice](https://en.wikipedia.org/wiki/Here_document) : vous allez utiliser une redirection), écrivez les [pangrammes](https://fr.wikipedia.org/wiki/Pangramme) suivant :
+3. Déplacez-vous à la racine de l'arborescence en utilisant son chemin *relatif* : à partir de tout répertoire, `.` désigne le chemin courant, et `..` désigne le répertoire parent. Comment auriez-vous fait pour vous déplacer à la racine par chemin *absolu* ?
+4. Affichez les fichiers et répertoires à la racine. Si certains sont cachés, ils doivent apparaître dans la sortie de votre commande. Reconnaissez-vous la [hiérarchie standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard#Directory_structure) d'un système de fichiers Unix ? Quelles différences pouvez-vous identifier ?
+5. Déplacez-vous dans votre répertoire utilisateur (*home*, en anglais). Pour cela, utilisez la variable d'environnement `$HOME`.
+6. Créez un répertoire `exercices` dans votre *home*.
+7. Déplacez-vous dans ce répertoire.
+8. Créez un fichier `exercices.txt`.
+9. Dans ce fichier, sans utiliser d'éditeur de texte ([indice](https://en.wikipedia.org/wiki/Here_document) : vous allez utiliser une redirection), écrivez les [pangrammes](https://fr.wikipedia.org/wiki/Pangramme) suivant :
 
     > The quick brown fox jumps over the lazy dog.  
     > Waltz, bad nymph, for quick jigs vex.  
@@ -89,16 +92,21 @@ Pour vous aider à démarrer, voici une liste des commandes que vous allez devoi
     > How vexingly quick daft zebras jump!  
     > The five boxing wizards jump quickly.  
     > Jackdaws love my big sphinx of quartz.  
+
+10. Ajoutez la ligne suivante au fichier :
+
     > Pack my box with five dozen liquor jugs.
 
-7. Ajoutez la ligne suivante au fichier :
+11. Affichez le contenu du fichier.
+12. Comptez le nombre de pangrammes que contient le fichier.
+13. Comptez le nombre d'occurrences du mot `quick` ([indice](https://en.wikipedia.org/wiki/Pipeline_(Unix)) : vous allez chaîner deux commandes). Attention, `quickly` ne doit pas être compté !
+14. Un pangramme apparaît en double dans le fichier. Dans une même commande, triez les pangrammes par ordre alphabétique (sur leur première lettre), débarrassez-vous du doublon, et écrivez le résultat dans un nouveau fichier `pangrammes.txt`.
+15. Le texte suivant est codé. Trouvez comment lui redonner sens :
 
-    > Pack my box with five dozen liquor jugs.
-
-8.  Affichez le contenu du fichier.
-9.  Comptez le nombre de pangrammes que contient le fichier.
-10. Comptez le nombre d'occurrences du mot `quick` ([indice](https://en.wikipedia.org/wiki/Pipeline_(Unix)) : vous allez chaîner deux commandes).
-11. Un pangramme apparaît en double dans le fichier. Dans une même commande, triez les pangrammes par ordre alphabétique (sur leur première lettre), débarrassez-vous du doublon, et écrivez le résultat dans un nouveau fichier `pangrammes.txt`.
+    > TmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXAKTmV2ZXIgZ29ubmEgbGV0IHlvdSBkb3duCk5ldmVyIGdv  
+    > bm5hIHJ1biBhcm91bmQgYW5kIGRlc2VydCB5b3UKTmV2ZXIgZ29ubmEgbWFrZSB5b3UgY3J5Ck5l  
+    > dmVyIGdvbm5hIHNheSBnb29kYnllCk5ldmVyIGdvbm5hIHRlbGwgYSBsaWUgYW5kIGh1cnQgeW91  
+    > Cg==
 
 ## TD1 : installation du système
 
