@@ -74,7 +74,7 @@ Et on obtient :
 
 Parfois, ces pages de manuel ne fournissent pas d'exemple d'utilisation d'une commande. Il existe une base de données communautaire pour cela, [tldr.sh](https://tldr.sh/).
 
-Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `base64`, `cat`, `cd`, `cp`, `diff`, `du`, `echo`, `find`, `grep`, `ls`, `mv`, `pwd`, `rm`, `sort`, `tar`, `touch`, `uniq`, `wc`.
+Pour vous aider à démarrer, voici une liste des commandes que vous allez devoir utiliser : `base64`, `cat`, `cd`, `cp`, `diff`, `du`, `echo`, `find`, `grep`, `ls`, `mkdir`, `mv`, `pwd`, `rm`, `sort`, `tar`, `touch`, `uniq`, `wc`.
 
 1. Quel est votre nom d'utilisateur ? Affichez la valeur de la variable d'environnement `$USER`.
 2. Identifiez le répertoire dans lequel vous vous situez au démarrage de votre shell.
