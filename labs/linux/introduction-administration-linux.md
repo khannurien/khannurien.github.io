@@ -7,6 +7,8 @@ grand_parent: Labs
 # Introduction à l'administration Linux
 {: .no_toc }
 
+<img align="right" width="100" src="./images/linux-torvalds.jpg" />
+
 > Hello everybody out there using minix -
 > 
 > I'm doing a (free) operating system (just a hobby, won't be big and
@@ -344,16 +346,14 @@ TODO: chown, chmod...
 
 ### Objectifs
 
-#### Fonctionnalités attendues...
+#### Fonctionnalités attendues
 
 #### Qualité du code
 
 Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord 
 
+Notions importantes :
 * idempotence ;
-* 
+* ...
 
-### Déroulé
-
-* Utiliser un template pour un [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038)
-* Lire l'article du créateur du script https://betterdev.blog/minimal-safe-bash-script-template/
+Vous utiliserez un squelette de [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038). L'auteur de ce squelette donne de nombreuses informations et détaille sa mise en œuvre dans un [article](https://betterdev.blog/minimal-safe-bash-script-template/) qu'il est recommandé de lire de son intégralité avant de démarrer.
