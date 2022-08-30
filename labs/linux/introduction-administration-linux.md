@@ -7,7 +7,7 @@ grand_parent: Labs
 # Introduction à l'administration Linux
 {: .no_toc }
 
-<img align="right" width="200" src="./images/linux-torvalds.jpg" />
+<img align="right" width="100" src="./images/linux-torvalds.jpg" />
 
 > Hello everybody out there using minix -
 > 
