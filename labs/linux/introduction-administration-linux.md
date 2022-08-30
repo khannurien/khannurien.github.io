@@ -276,24 +276,51 @@ Puisque les étapes suivantes du projet consistent à développer des scripts Ba
 
     ![](./images/vscode/vscode-remote-folder.png)
 
-#### Installation d'un paquet
+#### Gestion des paquets logiciels sous Ubuntu
 
-* serveur web
-  * configuration nginx
-  * ouverture de port
+La plupart des distributions Linux reposent sur un système de *paquets* pour l'installation de logiciels. Un paquet est une archive qui contient :
+* les fichiers nécessaires à l'exécution d'un logiciel (c'est-à-dire le binaire de l'application) ;
+* les métadonnées nécessaires à l'exécution d'un logiciel (notamment sa liste de *dépendances*, c'est-à-dire les paquets supplémentaires indispensables à son bon fonctionnement, comme des bibliothèques par exemple) ;
+* la documentation du logiciel ;
+* éventuellement le code source du logiciel (paquets nommés avec le suffixe `-dev` sous Ubuntu).
+
+Le système de paquets utilisé par Ubuntu est dérivé de celui de [Debian](https://www.debian.org/), la distribution "mère" d'Ubuntu. Cela explique l'extension des paquets Ubuntu, `.deb`.
+
+Vous interagirez rarement avec un paquet `.deb`. La plupart du temps, on utilise un *gestionnaire de paquets* pour travailler dans les *dépôts logiciels* de sa distribution. Ubuntu est livrée avec *APT* (pour *Advanced Packaging Tool*). APT est capable de lire l'index des paquets pour chercher, installer, mettre à jour ou supprimer un logiciel *et ses dépendances* -- c'est la force d'un gestionnaire de paquets, qui automatise ces processus parfois fastidieux.
+
+Pour installer un paquet sur votre système, il faudra agir avec les droits **superutilisateur**. Sous Ubuntu, le compte `root` est désactivé par défaut, vous ne pourrez donc pas utiliser `su` pour vous connecter en tant que superutilisateur.
+
+Toutefois, l'utilisateur que vous avez créé lors de l'installation a la permission d'élever ses privilèges le temps de l'exécution d'une commande. Pour cela, on préfixe la commande que l'on souhaite passer par `sudo`. Commencez par mettre à jour l'index des paquets avec `apt` :
+
+```bash
+sudo apt update
+```
+
+##### Installation d'un paquet
+
+Nous allons déployer un serveur web sur la VM en utilisant le gestionnaire de paquets.
+
+Un serveur web est un logiciel qui permet de servir du contenu *via* le protocole HTTP.
+
+Tout comme OpenSSH, Nginx est considéré par Ubuntu comme un [*service*](https://doc.ubuntu-fr.org/services). Sous Ubuntu, les services sous gérés par `systemd`. Pour interagir avec les services du système, on utilise la commande [`systemctl`](https://manpages.ubuntu.com/manpages/xenial/en/man1/systemctl.1.html).
+
+1. En vous appuyant sur [la documentation](https://ubuntu.com/server/docs/package-management), utilisez `apt` pour installer le serveur web [`nginx`](https://www.nginx.com/).
+2. Dans l'arborescence de votre VM Ubuntu, où se situe le répertoire de configuration de `nginx` ? TODO: expliquez rapidement le rôle des répertoires et fichiers qui s'y trouvent.
+3. Parcourez la configuration par défaut. Sur quelle adresse écoute le serveur web ? Quel est le port HTTP par défaut ?
+4. Comment vérifier l'état du serveur web ?
+5. Comment stopper ou démarrer `nginx` ?
+6. Ouvrez le port associé au serveur web dans la table NAT de VirtualBox.
+7. Comment pouvez-vous accéder aux pages servies par `nginx` depuis votre système hôte ?
+8. Modifiez le contenu de la page par défaut et vérifiez le résultat.
 
 #### Surveillance des journaux système
 
-* logwatch
-  * configuration pour nginx
+L'un des rôles clefs de l'administrateur système consiste à *superviser* le système dont il est en charge.
 
-`logwatch`
+Linux fournit un mécanisme de [journaux](https://ubuntu.com/tutorials/viewing-and-monitoring-log-files), fichiers texte qui centralisent les informations remontées par les services du système.
 
-```
-sudo apt update
-sudo apt dist-upgrade
-sudo apt install logwatch
-```
+1. Installez `logwatch`.
+2. Configurez `logwatch` pour remonter les journaux de `nginx`.
 
 ## TD3 : introduction à l'automatisation
 
@@ -304,6 +331,8 @@ TODO: Script shell...
 TODO: Création de backups...
 
 TODO: Extraction de backups...
+
+TODO: chown, chmod...
 
 ### Déroulé
 
