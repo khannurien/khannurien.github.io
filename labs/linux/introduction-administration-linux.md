@@ -79,6 +79,17 @@ Pour vous aider à démarrer, voici une liste des commandes que vous allez devoi
 1. Quel est votre nom d'utilisateur ? Affichez la valeur de la variable d'environnement `$USER`.
 2. Identifiez le répertoire dans lequel vous vous situez au démarrage de votre shell.
 3. Trouvez le chemin du fichier `os-release` dans l'arborescence. Combien de fichiers trouvez-vous ? Quelle différence y a-t-il entre eux ? Affichez leur contenu.
+
+    Note : la commande va retourner de nombreuses erreurs de permissions en lecture pour les chemins que la commande va lister. Sous Linux, tout processus a un flux d'entrée `stdin` (*standard input*) et deux flux de sortie `stdout` (*standard output*) et `stderr` (*standard error*). Lorsque vous souhaitez ne pas afficher les erreurs retournées par une commande, vous pouvez rediriger son flux `stderr` vers un fichier spécial, `/dev/null`, qui supprime toutes les données qui y sont écrites.
+
+    Pour effectuer cette redirection, préfixez le chevron par un `2` :
+
+    ```bash
+    ma_commande 2> /dev/null
+    ```
+
+    ![](./images/linux-input-output.png)
+
 4. Déplacez-vous à la racine de l'arborescence en utilisant son chemin *relatif* : à partir de tout répertoire, `.` désigne le chemin courant, et `..` désigne le répertoire parent. Comment auriez-vous fait pour vous déplacer à la racine par chemin *absolu* ?
 5. Affichez les fichiers et répertoires à la racine. Si certains sont cachés, ils doivent apparaître dans la sortie de votre commande. Reconnaissez-vous la [hiérarchie standard](https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard#Directory_structure) d'un système de fichiers Unix ? Quelles différences pouvez-vous identifier ?
 6. Déplacez-vous dans votre répertoire utilisateur (*home*, en anglais). Pour cela, utilisez la variable d'environnement `$HOME`.
