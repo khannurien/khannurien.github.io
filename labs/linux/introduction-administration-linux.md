@@ -351,7 +351,7 @@ Vous allez écrire un script Bash qui permet d'exécuter des tâches d'administr
 * **interactive** : l'exécution du script sans arguments ouvre un menu qui liste les actions possibles, et permet à l'utilisateur de sélectionner la tâche qu'il souhaite effectuer. Dès lors que celle-ci se termine, le menu doit s'afficher de nouveau ;
 * **en lot** : en passant des paramètres au script, celui-ci doit exécuter l'action voulue et rendre la main à l'utilisateur.
 
-#### Fonctionnalités attendues
+### Fonctionnalités attendues
 
 Votre script devra permettre d'effectuer les quatre actions suivantes :
 
@@ -373,7 +373,7 @@ Pour les formater, vous aurez besoin d'extraire et isoler certaines informations
 
 #### Qualité du code
 
-Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord qui peuvent être indésirables, et votre script d'administration demandera les privilègues superutilisateur pour une partie de ses fonctionnalités !
+Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord qui peuvent être indésirables, et votre script d'administration demandera les privilèges superutilisateur pour une partie de ses fonctionnalités !
 
 Afin de limiter les mauvaises surprises, vous utiliserez un squelette de [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038). L'auteur de ce squelette donne de nombreuses informations et détaille sa mise en œuvre dans un [article](https://betterdev.blog/minimal-safe-bash-script-template/) qu'il vous est recommandé de lire de son intégralité avant de démarrer.
 
