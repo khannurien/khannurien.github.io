@@ -332,7 +332,7 @@ L'un des rôles clefs de l'administrateur système consiste à *superviser* le s
 
 Linux fournit un mécanisme de [journaux](https://ubuntu.com/tutorials/viewing-and-monitoring-log-files), fichiers texte qui centralisent les informations remontées par les services du système.
 
-`systemd` fournit un utilitaire, `journalctl`, qui centralise les journaux du système. Nous allons mettre en place une tâche programmée, appelée *cron job*, qui synthétisera les informations importantes remontées par le serveur SSH et le serveur web qui tournent sur votre VM.
+`systemd` fournit un utilitaire, `journalctl`, qui centralise les journaux du système. Nous allons mettre en place une tâche programmée, appelée *cron job*, qui s'exécutera une fois par jour et synthétisera les informations importantes remontées par le serveur SSH et le serveur web qui tournent sur votre VM.
 
 1. Quels sont les chemins vers les journaux de `nginx` ? Où avez-vous trouvé cette information ? Quel rôle joue chacun de ces fichiers journaux ?
 2. Comment consulter les journaux du serveur SSH via `journalctl` ?
