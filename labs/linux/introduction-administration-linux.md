@@ -371,7 +371,7 @@ Voici quelques pistes parmi les commandes qui pourront vous aider à alimenter l
 
 Pour les formater, vous aurez besoin d'extraire et isoler certaines informations. À ces fins, utilisez `awk`, `cut`, `grep`, `sed`...
 
-#### Qualité du code
+### Qualité du code
 
 Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord qui peuvent être indésirables, et votre script d'administration demandera les privilèges superutilisateur pour une partie de ses fonctionnalités !
 
