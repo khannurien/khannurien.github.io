@@ -171,7 +171,7 @@ Deux notions sont importantes pour cette étape :
 * Image disque : un fichier, souvent d'extension `.iso` ou `.img`, qui représente un média amorçable (*bootable*) que l'on pourrait copier sur un disque flash par exemple. Il contient un chargeur d'amorçage et un système d'exploitation. Ces images disques sont utilisées pour installer un nouvel OS sur une machine, physique ou virtuelle ;
 * Disque virtuel : un fichier, souvent d'extension `.vdi`, qui représente le disque d'amorçage d'un système d'exploitation.
 
-1. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server).
+1. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server). Note : elle est à votre disposition sur un disque partagé de l'école, sous `N:\ens\inf\Linux`.
 
 2. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton "Nouvelle" et suivez le guide :
     * 2048 Mo de mémoire vive devraient suffire ;
@@ -191,7 +191,7 @@ Vous allez pouvoir vous lancer dans l'installation du système à proprement par
 
 1. Choisissez la langue et la disposition du clavier de votre choix. Si vous utilisez un clavier Azerty, la disposition à choisir est "French".
 
-2. Le type d'installation à sélectionner est *Ubuntu Server (**minimized**)* :
+2. Le type d'installation à sélectionner est la première, *Ubuntu Server* (et non pas *minimized*) :
 
     ![](./images/virtualbox/virtualbox-server-minimized.png)
 
@@ -318,9 +318,9 @@ Un serveur web est un logiciel qui permet de servir du contenu *via* le protocol
 Tout comme OpenSSH, Nginx est considéré par Ubuntu comme un [*service*](https://doc.ubuntu-fr.org/services). Sous Ubuntu, les services sous gérés par `systemd`. Pour interagir avec les services du système, on utilise la commande [`systemctl`](https://manpages.ubuntu.com/manpages/xenial/en/man1/systemctl.1.html).
 
 1. En vous appuyant sur [la documentation](https://ubuntu.com/server/docs/package-management), utilisez `apt` pour installer le serveur web [`nginx`](https://www.nginx.com/).
-2. Dans l'arborescence de votre VM Ubuntu, où se situe le répertoire de configuration de `nginx` ? TODO: expliquez rapidement le rôle des répertoires et fichiers qui s'y trouvent.
-3. Parcourez la configuration par défaut. Sur quelle adresse écoute le serveur web ? Quel est le port HTTP par défaut ?
-4. Comment vérifier l'état du serveur web ?
+2. Dans l'arborescence de votre VM Ubuntu, où se situe le répertoire de configuration de `nginx` ? Expliquez rapidement le rôle des répertoires et fichiers qui s'y trouvent et vous semblent importants.
+3. Parcourez la configuration par défaut. Sur quelle adresse écoute le serveur web ? Quel est le port HTTP par défaut ? Confirmez vos hypothèses avec la commande `ss`.
+4. Comment vérifier l'état du serveur web ? C'est-à-dire, comment savoir s'il est en cours d'exécution ou arrêté, s'il est en erreur...
 5. Comment stopper ou démarrer `nginx` ?
 6. Ouvrez le port associé au serveur web dans la table NAT de VirtualBox.
 7. Comment pouvez-vous accéder aux pages servies par `nginx` depuis votre système hôte ?
@@ -328,43 +328,55 @@ Tout comme OpenSSH, Nginx est considéré par Ubuntu comme un [*service*](https:
 
 #### Surveillance des journaux système
 
-L'un des rôles clefs de l'administrateur système consiste à *superviser* le système dont il est en charge.
+L'un des rôles clefs de l'administrateur système consiste à *superviser* le système dont il ou elle est en charge.
 
 Linux fournit un mécanisme de [journaux](https://ubuntu.com/tutorials/viewing-and-monitoring-log-files), fichiers texte qui centralisent les informations remontées par les services du système.
 
-1. Installez `logwatch`.
-2. Configurez `logwatch` pour remonter les journaux de `nginx`.
+`systemd` fournit un utilitaire, `journalctl`, qui centralise les journaux du système. Nous allons mettre en place une tâche programmée, appelée *cron job*, qui synthétisera les informations importantes remontées par le serveur SSH et le serveur web qui tournent sur votre VM.
 
-## TD3 : introduction à l'automatisation
+1. Quels sont les chemins vers les journaux de `nginx` ? Où avez-vous trouvé cette information ? Quel rôle joue chacun de ces fichiers journaux ?
+2. Comment consulter les journaux du serveur SSH via `journalctl` ?
+3. Observez le comportement de `journalctl` pour une connexion SSH réussie, puis pour une connexion SSH échouée. Remarquez-vous un formalisme dans les messages remontés ?
+4. Comment consulter les journaux du serveur web via `journalctl` ?
+5. Créez une tâche `cron` (indice : `man crontab`) qui crée, chaque jour à 3:00 du matin, un fichier récapitulatif de l'état de SSH et `nginx`. Ce fichier sera stocké sous `/root/logs` et sera nommé sous la forme suivante : `journalctl_1970-01-01.log` (la commande `date` permet de générer et formater des dates).
 
-### Objectifs
+    > Note : la syntaxe du fichier `crontab` n'est pas forcément évidente à maîtriser. N'hésitez pas à vous appuyer sur un utilitaire comme [crontab.guru](https://crontab.guru/).
 
-TODO: Script shell...
-
-TODO: Création de backups...
-
-TODO: Extraction de backups...
-
-TODO: chown, chmod...
-
-### Déroulé
-
-1. TODO: VSCode remote + shellcheck
-
-🔎 Lorsque `shellcheck` vous remonte un avertissement ou une erreur, reportez-le dans votre compte rendu et expliquez comment vous l'avez traité et résolu.
-
-## TD4 : développement d'un script d'administration
+## TD3 : développement d'un script d'administration
 
 ### Objectifs
+
+Vous allez écrire un script Bash qui permet d'exécuter des tâches d'administration de deux manières :
+
+* **interactive** : l'exécution du script sans arguments ouvre un menu qui liste les actions possibles, et permet à l'utilisateur de sélectionner la tâche qu'il souhaite effectuer. Dès lors que celle-ci se termine, le menu doit s'afficher de nouveau ;
+* **en lot** : en passant des paramètres au script, celui-ci doit exécuter l'action voulue et rendre la main à l'utilisateur.
 
 #### Fonctionnalités attendues
 
+Votre script devra permettre d'effectuer les quatre actions suivantes :
+
+- Mise à jour de l'index des dépôts logiciels ;
+- Mise à jour des logiciels installés ;
+- Création d'une sauvegarde de la configuration du système :
+  - SSH ;
+  - `nginx` ;
+  - `crontab` ;
+- Création d'un rapport sur l'état du système :
+  - *Load average* ;
+  - Mémoire disponible ;
+  - Utilisation du disque ;
+  - État des services.
+
+Voici quelques pistes parmi les commandes qui pourront vous aider à alimenter les rapports système : `free`, `ps`, `top`, `df`...
+
+Pour les formater, vous aurez besoin d'extraire et isoler certaines informations. À ces fins, utilisez `awk`, `cut`, `grep`, `sed`...
+
 #### Qualité du code
 
-Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord 
+Un script shell est potentiellement dangereux : certaines commandes produisent des effets de bord qui peuvent être indésirables, et votre script d'administration demandera les privilègues superutilisateur pour une partie de ses fonctionnalités !
 
-Notions importantes :
-* idempotence ;
-* ...
+Afin de limiter les mauvaises surprises, vous utiliserez un squelette de [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038). L'auteur de ce squelette donne de nombreuses informations et détaille sa mise en œuvre dans un [article](https://betterdev.blog/minimal-safe-bash-script-template/) qu'il vous est recommandé de lire de son intégralité avant de démarrer.
 
-Vous utiliserez un squelette de [script Bash sans danger](https://gist.github.com/m-radzikowski/53e0b39e9a59a1518990e76c2bff8038). L'auteur de ce squelette donne de nombreuses informations et détaille sa mise en œuvre dans un [article](https://betterdev.blog/minimal-safe-bash-script-template/) qu'il est recommandé de lire de son intégralité avant de démarrer.
+Par ailleurs, vous utiliserez l'extension VSCode [`shellcheck`](https://www.shellcheck.net/). Cet utilitaire permet de vérifier en temps réel la qualité du code que vous écrivez. Il vous évitera de vous arracher les cheveux et rendra votre code plus sûr.
+
+🔎 Lorsque `shellcheck` vous remonte un avertissement ou une erreur, reportez-le dans votre compte rendu et expliquez comment vous l'avez traité et résolu.
