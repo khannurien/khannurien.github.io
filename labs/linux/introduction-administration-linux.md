@@ -179,6 +179,8 @@ Deux notions sont importantes pour cette étape :
 
 3. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.1-live-server-amd64.iso`.
 
+    > ⚠️ Si le démarrage de la VM se solde par une erreur *Kernel panic*, vérifiez que VirtualBox lui a bien attribué **2 CPU**. Vous trouverez ce paramètre dans la configuration de la machine virtuelle, sous *Système > Processeur*.
+
 4. Si tout s'est bien passé, voici l'écran que vous devriez voir s'afficher :
 
     ![](./images/virtualbox/virtualbox-grub.png)
