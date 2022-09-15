@@ -279,6 +279,8 @@ Puisque les étapes suivantes du projet consistent à développer des scripts Ba
 
     ![](./images/vscode/vscode-remote-extension.png)
 
+    > ⚠️ Il est possible que l'installation de l'extension échoue sur le réseau de l'école. Vous pouvez installer l'extension manuellement, en téléchargeant le fichier `.vsix` sur la [page de l'extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh).
+
 3. Connectez-vous à votre machine virtuelle :
 
     ![](./images/vscode/vscode-remote-host.png)
