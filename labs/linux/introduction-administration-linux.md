@@ -355,6 +355,10 @@ Vous allez écrire un script Bash qui permet d'exécuter des tâches d'administr
 * **interactive** : l'exécution du script sans arguments ouvre un menu qui liste les actions possibles, et permet à l'utilisateur de sélectionner la tâche qu'il souhaite effectuer. Dès lors que celle-ci se termine, le menu doit s'afficher de nouveau ;
 * **en lot** : en passant des paramètres au script, celui-ci doit exécuter l'action voulue et rendre la main à l'utilisateur.
 
+Voici un exemple de fonctionnement attendu en mode interactif :
+
+![](images/linux-admin-interactive.gif)
+
 ### Fonctionnalités attendues
 
 Votre script devra permettre d'effectuer les quatre actions suivantes :
