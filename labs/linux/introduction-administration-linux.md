@@ -353,11 +353,7 @@ Linux fournit un mécanisme de [journaux](https://ubuntu.com/tutorials/viewing-a
 Vous allez écrire un script Bash qui permet d'exécuter des tâches d'administration de deux manières :
 
 * **interactive** : l'exécution du script sans arguments ouvre un menu qui liste les actions possibles, et permet à l'utilisateur de sélectionner la tâche qu'il souhaite effectuer. Dès lors que celle-ci se termine, le menu doit s'afficher de nouveau ;
-* **en lot** : en passant des paramètres au script, celui-ci doit exécuter l'action voulue et rendre la main à l'utilisateur.
-
-Voici un exemple de fonctionnement attendu en mode interactif :
-
-![](images/linux-admin-interactive.gif)
+* **en lot** (ou *batch*): en passant des paramètres au script, celui-ci doit exécuter l'action voulue et rendre la main à l'utilisateur.
 
 ### Fonctionnalités attendues
 
@@ -371,13 +367,58 @@ Votre script devra permettre d'effectuer les quatre actions suivantes :
   - `crontab` ;
 - Création d'un rapport sur l'état du système :
   - *Load average* ;
+  - Processus consommateurs de ressources ;
   - Mémoire disponible ;
   - Utilisation du disque ;
   - État des services.
 
-Voici quelques pistes parmi les commandes qui pourront vous aider à alimenter les rapports système : `free`, `ps`, `top`, `df`...
+Voici quelques pistes parmi les commandes qui pourront vous aider à alimenter les rapports système : `df`, `free`, `ps`, `top`, `uptime`...
 
 Pour les formater, vous aurez besoin d'extraire et isoler certaines informations. À ces fins, utilisez `awk`, `cut`, `grep`, `sed`...
+
+#### Mode interactif
+
+Voici un exemple de fonctionnement attendu en mode interactif :
+
+![](images/linux-admin-interactive.gif)
+
+L'appel au script en mode interactif se fait sans passage d'arguments :
+
+```bash
+vincent@LAP-308:~/linux-admin$ ./linux-admin.sh
+```
+
+La boucle de menu peut être conçue de la manière suivante :
+
+```bash
+while read -r line; do
+  if [[ "${line}" = "0" ]]; then
+    cleanup
+  elif [[ "${line}" = "1" ]]; then
+    update_repositories
+  elif [[ "${line}" = "2" ]]; then
+    upgrade_packages
+  elif [[ "${line}" = "3" ]]; then
+    create_backup
+  elif [[ "${line}" = "4" ]]; then
+    create_report
+  else
+    msg "${RED}You must pick a number as specified above.${NOFORMAT}"
+  fi
+
+  print_menu
+done
+```
+
+#### Mode batch
+
+Voici un appel au script en mode batch pour réaliser l'opération de mise à jour des dépôts :
+
+```bash
+vincent@LAP-308:~/linux-admin$ ./linux-admin.sh --update-repositories
+```
+
+Vous devez donc détecter le passage -- ou l'absence de passage -- de *flags* à l'appel du script pour passer dans le mode approprié.
 
 ### Qualité du code
 
