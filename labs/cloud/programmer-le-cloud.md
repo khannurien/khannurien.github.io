@@ -22,15 +22,15 @@ Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gra
 
 * un compte [GitHub](https://github.com/) pour héberger votre dépôt et réaliser l'intégration et la livraison continues ;
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
-* un compte [Heroku](https://www.heroku.com/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
+* un compte [Fly.io](https://fly.io/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
-Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Heroku, il peut y avoir une latence entre la demande de création de compte et sa validation.
+Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Fly.io, il peut y avoir une latence entre la demande de création de compte et sa validation.
 
 Pour développer localement, sur votre machine, il vous faudra installer :
 
 * [Node.js](https://nodejs.org/en/) (version LTS, 16 actuellement) ;
 * [Docker](https://docs.docker.com/get-docker/) ;
-* [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+* [flyctl](https://fly.io/docs/hands-on/install-flyctl/).
 
 Les procédures d'installation seront données lorsque nécessaire, au fur et à mesure du sujet.
 
@@ -277,28 +277,28 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 3. Relisez la question 4 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
-## TD4 : déploiement sur PaaS avec Heroku
+## TD4 : déploiement sur PaaS avec Fly.io
 
 ### Objectif
 
 Pour cette dernière étape, nous allons nous intéresser au **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
 
-Cette plateforme sera **Heroku**. En particulier, leur offre *PaaS* propose un tier gratuit pour déployer des applications sous forme de conteneurs sur leur infrastructure.
+Cette plateforme sera **Fly.io**. En particulier, leur offre *PaaS* propose un tier gratuit pour déployer des applications sous forme de conteneurs sur leur infrastructure.
 
-Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, une image Docker sera recréée et déployée chez Heroku.
+Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, une image Docker sera recréée et déployée chez Fly.io.
 
 ### Déroulé
 
-0. Heroku fournit un outil en ligne de commande, *Heroku CLI*, qui facilite la connexion aux services, la création d'une application Heroku, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Heroku et créer une application. Pour cela, appuyez-vous sur [la documentation Heroku Dev Center](https://devcenter.heroku.com/articles/heroku-cli#download-and-install). Notez l'URL qui vous est fournie par Heroku : elle comporte l'identifiant de votre application et vous permettra de passer aux étapes suivantes.
+1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
 
-1. Heroku utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://devcenter.heroku.com/articles/container-registry-and-runtime#logging-in-to-the-registry).
+2. Heroku utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://devcenter.heroku.com/articles/container-registry-and-runtime#logging-in-to-the-registry).
 
-2. Publiez l'image Docker de votre application sur le registre Heroku. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2 ; vous pouvez aussi utiliser la CLI Heroku. Toutes les informations sont dans [la documentation](https://devcenter.heroku.com/articles/container-registry-and-runtime#building-and-pushing-image-s). Quelle(s) différence(s) y a-t-il entre les deux méthodes ? Qu'est-ce que le *process type* auquel cette page fait référence ? Quelle valeur allez-vous utiliser ?
+3. Publiez l'image Docker de votre application sur le registre Heroku. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2 ; vous pouvez aussi utiliser la CLI Heroku. Toutes les informations sont dans [la documentation](https://devcenter.heroku.com/articles/container-registry-and-runtime#building-and-pushing-image-s). Quelle(s) différence(s) y a-t-il entre les deux méthodes ? Qu'est-ce que le *process type* auquel cette page fait référence ? Quelle valeur allez-vous utiliser ?
 
-3. Démarrez l'application, puis visitez-la à son URL. Que constatez-vous ? Inspectez les journaux de l'application grâce à Heroku CLI. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
+4. Démarrez l'application, puis visitez-la à son URL. Que constatez-vous ? Inspectez les journaux de l'application grâce à Heroku CLI. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
 
-4. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
+5. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
 
-5. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
+6. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
 
 6. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Heroku dès lors qu'une modification est publiée sur le dépôt Git. À vous de trouver la solution ! Une première piste : il va falloir [activer l'intégration GitHub dans le dashboard Heroku](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration).
