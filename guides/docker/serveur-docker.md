@@ -103,9 +103,7 @@ Docker propose de gérer des volumes nommés, par défaut stockés sous `/var/li
 
 On crée le fichier `/home/docker/docker-compose.yml` avec la définition de l'ensemble de nos services. La configuration de Traefik est dynamique : on la passe à la création du conteneur. Les labels que l'on ajoute à chacun des conteneurs permettent à Traefik d'identifier les services et de créer les routes nécessaires.
 
-Je me suis largement appuyé sur [un article du blog de Gérald Croës](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/) que je vous recommande pour comprendre en détails le fonctionnement du reverse proxy.
-
-Une note importante sur la version des images que vous choisissez : n'utilisez pas `latest` comme je le fais, par souci de simplification, dans l'exemple ci-dessous. Sélectionnez la dernière version stable et faîtes bien attention aux mises à jour. Par exemple, lorsque j'ai écrit ce guide, la version stable de Traefik était la `2.1`. Dans sa version `2.2`, la redirection globale vers HTTPS est [largement simplifiée](https://www.grottedubarbu.fr/traefik-2-2rc/).
+Je me suis largement appuyé sur [un article du blog de Gérald Croës](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/) que je vous recommande pour comprendre en détails le fonctionnement de Traefik.
 
 ```yaml
 version: '3'
