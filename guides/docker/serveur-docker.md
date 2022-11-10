@@ -108,11 +108,68 @@ Je me suis largement appuyé sur [un article du blog de Gérald Croës](https://
 Une note importante sur la version des images que vous choisissez : n'utilisez pas `latest` comme je le fais, par souci de simplification, dans l'exemple ci-dessous. Sélectionnez la dernière version stable et faîtes bien attention aux mises à jour. Par exemple, lorsque j'ai écrit ce guide, la version stable de Traefik était la `2.1`. Dans sa version `2.2`, la redirection globale vers HTTPS est [largement simplifiée](https://www.grottedubarbu.fr/traefik-2-2rc/).
 
 ```yaml
-version: "3"
+version: '3'
 
 services:
+  traefik:
+    image: traefik:v2.9
+    command:
+      - "--api"
+      - "--providers.docker"
+      - "--accesslog=true"
+      - "--accesslog.filepath=/var/log/traefik.log"
+      - "--pilot.dashboard=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--serverstransport.insecureskipverify=true"
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+      - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=toto@example.com"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/etc/traefik/acme/acme.json"
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - traefik_logs:/var/log
+      - traefik_certs:/etc/traefik/acme
+    environment:
+      - TZ=Europe/Paris
+    labels:
+      - "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
+      - "traefik.http.routers.traefik.service=api@internal"
+      - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.traefik.entrypoints=websecure"
+      - "traefik.http.routers.traefik.middlewares=admin"
+      - "traefik.http.middlewares.admin.basicauth.users=toto:$$2y$$05$$LJ8gDZQN7puZmTM.OygwXu2uQQt1aTPDeA2uR6wExVSH6NRS0Ku8C"
+
+  portainer:
+    image: portainer/portainer-ce:2.16
+    command: -H unix:///var/run/docker.sock
+    restart: always
+    expose:
+      - "8000"
+      - "9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    labels:
+      - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.rule=Host(`portainer.example.com`)"
+      - "traefik.http.routers.portainer.tls=true"
+      - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
 
 volumes:
+  traefik_logs:
+  traefik_certs:
+  portainer_data:
 
 ```
 
