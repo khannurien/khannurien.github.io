@@ -7,6 +7,10 @@ grand_parent: Labs
 # Programmer le Cloud
 {: .no_toc }
 
+<img align="center" src="./images/xkcd-automation.png" />
+
+[xkcd](https://xkcd.com/1319/)
+
 1. TOC
 {:toc}
 
@@ -291,14 +295,16 @@ Vous allez d'abord déployer votre application à la main, afin de vous familiar
 
 1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
 
-2. Heroku utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://devcenter.heroku.com/articles/container-registry-and-runtime#logging-in-to-the-registry).
+2. Fly.io utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://fly.io/docs/flyctl/auth-docker/).
 
-3. Publiez l'image Docker de votre application sur le registre Heroku. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2 ; vous pouvez aussi utiliser la CLI Heroku. Toutes les informations sont dans [la documentation](https://devcenter.heroku.com/articles/container-registry-and-runtime#building-and-pushing-image-s). Quelle(s) différence(s) y a-t-il entre les deux méthodes ? Qu'est-ce que le *process type* auquel cette page fait référence ? Quelle valeur allez-vous utiliser ?
+3. Publiez l'image Docker de votre application sur le registre Fly.io. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2. Attention : vous devez bien préciser, lors de l'appel à `docker push`, l'adresse du registre que vous souhaitez utiliser (en l'occurrence, `registry.fly.io`). Préfixez le nom de votre image avec l'adresse du registre (`docker push [registre]/[image]`).
 
-4. Démarrez l'application, puis visitez-la à son URL. Que constatez-vous ? Inspectez les journaux de l'application grâce à Heroku CLI. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
+4. Déployez l'application chez Fly.io à partir de l'image que vous venez de publier en utilisant `flyctl deploy` (cf. la [documentation](https://fly.io/docs/flyctl/deploy/)). Vous allez devoir préciser les flags suivants : `--app` pour le nom de votre application, et `--image` pour l'adresse de votre image Docker.
 
-5. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
+5. Visitez votre application en vous rendant à son URL dans votre navigateur, ou en utilisant `curl`. Que constatez-vous ? Inspectez les journaux de l'application grâce à `flyctl logs`. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
 
-6. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
+6. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
 
-6. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Heroku dès lors qu'une modification est publiée sur le dépôt Git. À vous de trouver la solution ! Une première piste : il va falloir [activer l'intégration GitHub dans le dashboard Heroku](https://devcenter.heroku.com/articles/github-integration#enabling-github-integration).
+7. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
+
+8. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Fly.io dès lors qu'une modification est publiée sur le dépôt Git. Fly.io fournit un [guide à cet effet](https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/). Reportez dans votre compte-rendu les étapes que vous avez suivies, les difficultés rencontrées et la méthode que vous avez suivie pour tester votre déploiement continu.
