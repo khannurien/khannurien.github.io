@@ -279,7 +279,7 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 2. Une fois votre *workflow* écrit, testez-le. Comment vérifiez-vous son fonctionnement ?
 
-3. Relisez la question 4 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
+3. Relisez la question 6 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
 ## TD4 : déploiement sur PaaS avec Fly.io
 
