@@ -19,25 +19,28 @@ Dans ce guide, je vous propose d'utiliser Docker et Docker Compose pour déploye
 
 (figure)
 
-* un VPN qui fonctionne sur le port HTTPS standard afin d'être accessible depuis n'importe quel réseau, même limité, et qui transfère au *reverse proxy* les requêtes HTTP qui lui sont destinées ;
-* un *reverse proxy* pour traiter les requêtes HTTP passées par le VPN ;
-* un ensemble de services, selon vos besoins, exposés par l'intermédiaire du reverse proxy :
+* [Traefik](https://hub.docker.com/_/traefik), un *reverse proxy* s'intercale entre Internet et les différents services que l'on souhaite exposer ;
+* [OpenVPN](https://hub.docker.com/r/kylemanna/openvpn), un VPN configuré pour utiliser TCP, et qui écoute sur le port HTTPS standard, afin d'être accessible depuis n'importe quel réseau, même limité ;
+* [Portainer](https://hub.docker.com/r/portainer/portainer-ce), un *dashboard* web pour Docker ;
+* [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud), une plateforme de stockage (fichiers, photos...) et de partage (calendriers, contacts...) ;
+* [MariaDB](https://hub.docker.com/_/mariadb), une base de données qui sera utilisée par Nextcloud.
 
 ## Pré-requis
 
-Il voudra faudra un nom de domaine (optez pour [l'un](https://www.bookmyname.com/) [des](https://www.gandi.net/fr) [nombreux](https://www.namecheap.com/) [fournisseurs](https://www.ovhcloud.com/fr/domains/), parfois même [gratuit](https://www.dynu.com/)). Pour l'exemple, mon domaine sera `example.com`.
+1. Il voudra faudra un nom de domaine (optez pour [l'un](https://www.bookmyname.com/) [des](https://www.gandi.net/fr) [nombreux](https://www.namecheap.com/) [fournisseurs](https://www.ovhcloud.com/fr/domains/), parfois même [gratuit](https://www.dynu.com/)). Pour l'exemple, mon domaine sera `example.com`.
 
 Faîtes pointer votre nom de domaine ainsi que tous ses sous-domaines vers votre adresse IP publique. La marche est à suivre diffère selon les fournisseurs (registrars), mais en gros, dans la configuration DNS de votre domaine, vous devrez créer deux enregistrements A de type :
 
-| A | @             | 10.0.0.1 |
-|---|---------------|----------|
-| A | *.example.com | 10.0.0.1 |
+| Type | Domaine       | Adresse  |
+|------|---------------|----------|
+| A    | @             | 10.0.0.1 |
+| A    | *.example.com | 10.0.0.1 |
 
-@ correspond à la racine (c'est-à-dire "chezoim.com") chez la plupart des bureaux d'enregistrement.
+`@` correspond à la racine (c'est-à-dire *example.com*) chez la plupart des bureaux d'enregistrement.
 
-Il faudra ouvrir deux ports sur votre routeur ou box : 80 (HTTP) et 443 (HTTPS). La marche à suivre dépend du modèle, mais [tout est documenté](https://fr.wikihow.com/ouvrir-des-ports).
+2. Il faudra ouvrir deux ports sur votre routeur ou box : 80 (HTTP) et 443 (HTTPS). La marche à suivre dépend du modèle, mais [tout est documenté](https://fr.wikihow.com/ouvrir-des-ports).
 
-Vous avez à votre disposition une machine GNU/Linux. Le guide fonctionne pour Ubuntu 22.10.
+3. Vous avez à votre disposition une machine GNU/Linux. Le guide fonctionne pour Ubuntu 22.04.
 
 ### Installation de Docker
 
@@ -76,15 +79,7 @@ sudo docker run hello-world
 
 ## Préambule
 
-Pour résumer, voici les images Docker que l'on va utiliser :
-
-* Serveur VPN : [OpenVPN](https://hub.docker.com/r/kylemanna/openvpn) ;
-* Reverse proxy : [Traefik](https://hub.docker.com/_/traefik) ;
-* Base de données : [MariaDB](https://hub.docker.com/_/mariadb) ;
-* Dashboard Docker : [Portainer](https://hub.docker.com/r/portainer/portainer-ce) ;
-* Synchronisation et partage : [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud).
-
-Puisque OpenVPN et Traefik vont écouter sur des ports réservés (443 et 80), un simple utilisateur ne pourra pas créer les conteneurs. On va donc passer en root avant d'effectuer la suite des manipulations.
+Puisque OpenVPN et Traefik vont écouter sur des ports réservés (443 et 80), un simple utilisateur ne pourra pas créer leurs conteneurs. On va donc passer en `root` avant d'effectuer la suite des manipulations.
 
 ## Démarrage
 
@@ -92,18 +87,28 @@ On crée un répertoire pour stocker la configuration des services :
 
 ```shell
 sudo su
-mkdir /home/docker
-chmod 700 /home/docker
-cd /home/docker
+mkdir /var/stack
+chmod 700 /var/stack
+cd /var/stack
 ```
 
 Docker propose de gérer des volumes nommés, par défaut stockés sous `/var/lib/docker/volumes`. C'est la solution que l'on va utiliser pour centraliser les données et la configuration des services.
 
 ## Définition des services
 
-On crée le fichier `/home/docker/docker-compose.yml` avec la définition de l'ensemble de nos services. La configuration de Traefik est dynamique : on la passe à la création du conteneur. Les labels que l'on ajoute à chacun des conteneurs permettent à Traefik d'identifier les services et de créer les routes nécessaires.
+On crée le fichier `/var/stack/docker-compose.yml` avec la définition de l'ensemble de nos services.
 
-Je me suis largement appuyé sur [un article du blog de Gérald Croës](https://traefik.io/blog/traefik-2-0-docker-101-fc2893944b9d/) que je vous recommande pour comprendre en détails le fonctionnement de Traefik.
+La configuration de Traefik est dynamique : on la passe à la création du conteneur. Les labels que l'on ajoute à chacun des conteneurs permettent à Traefik d'identifier les services et de créer les routes nécessaires.
+
+
+
+https://www.reddit.com/r/Traefik/comments/di6zds/openvpn_server_behind_traefik/
+https://www.reddit.com/r/Traefik/comments/g6rr3f/openvpn_with_traefik_22_using_udp/
+https://github.com/kylemanna/docker-openvpn/blob/1228577d4598762285958ad98724ab37e7b11354/docs/tcp.md
+https://community.traefik.io/t/traefik-does-not-work-with-mariadb/13945
+
+
+
 
 ```yaml
 version: '3'
@@ -147,6 +152,21 @@ services:
       - "traefik.http.routers.traefik.middlewares=admin"
       - "traefik.http.middlewares.admin.basicauth.users=toto:$$2y$$05$$LJ8gDZQN7puZmTM.OygwXu2uQQt1aTPDeA2uR6wExVSH6NRS0Ku8C"
 
+  openvpn:
+    cap_add:
+     - NET_ADMIN
+    image: kylemanna/openvpn:2.4
+    restart: always
+    depends_on:
+      - "traefik"
+    labels:
+      #- "traefik.enable=true"
+      - "traefik.tcp.services.openvpn.loadbalancer.server.port=443"
+      - "traefik.tcp.routers.openvpn.rule=HostSNI(`*`)"
+      - "traefik.tcp.routers.openvpn.entrypoints=websecure"
+    volumes:
+      - openvpn_data:/etc/openvpn
+
   portainer:
     image: portainer/portainer-ce:2.16
     command: -H unix:///var/run/docker.sock
@@ -167,11 +187,12 @@ services:
 volumes:
   traefik_logs:
   traefik_certs:
+  openvpn_data:
   portainer_data:
 
 ```
 
-À noter qu'on utilise une authentification basique pour l'interface de Traefik. Pour générer un identifiant, utilisez la commande suivante – ici, l'utilisateur `toto` avec comme mot de passe `blabla` :
+À noter qu'on utilise une authentification basique pour l'interface web de Traefik. Pour générer un identifiant, utilisez la commande suivante – ici, l'utilisateur `toto` avec comme mot de passe `blabla` :
 
 ```shell
 echo $(htpasswd -nbB toto "blabla") | sed -e s/\\$/\\$\\$/g
@@ -186,11 +207,11 @@ On sauvegarde également dans un volume le fichier `acme.json` qui contient nos 
 On génère la configuration d'OpenVPN (TCP sur le port `443`, "partagé" avec Traefik) :
 
 ```shell
-# générez la configuration qui permettra à OpenVPN de faire suivre les paquets arrivant sur son port d'écoute à Traefik
-docker-compose run --rm openvpn ovpn_genconfig -u tcp://example.com:443 -e 'port-share traefik 443'
+# générez la configuration du serveur OpenVPN pour utiliser TCP
+docker-compose run --rm openvpn ovpn_genconfig -u tcp://vpn.example.com:443
 
 # rentrez un mot de passe solide et faîtes correspondre le Common Name demandé au nom d'hôte de votre serveur (i.e. le résultat de la commande hostname)
-docker-compose run --rm openvpn ovpn_initpki
+docker-compose run --rm -it openvpn ovpn_initpki
 ```
 
 On peut prendre de l'avance et créer un certificat pour un client nommé `toto`. Le fichier `.ovpn` généré est auto-suffisant – vous pourrez l'importer dans n'importe quel client OpenVPN moderne :
@@ -219,7 +240,7 @@ Il est fort probable que la finalisation prenne trop de temps et que vous obteni
 
 ## État des lieux
 
-À ce stade, dans /home/docker, vous avez deux fichiers :
+À ce stade, dans `/var/stack`, vous avez deux fichiers :
 
 * `docker-compose.yml` qui définit les services à exécuter ;
 * `toto.ovpn` qui est votre fichier de configuration pour un client OpenVPN.
@@ -230,7 +251,7 @@ Vos données sont stockées dans les volumes nommés définis par Docker Compose
 
 Mettez en place des sauvegardes – c'est simple, vous avez deux répertoires à surveiller :
 
-* `/home/docker` qui contient la déclaration de vos services ;
+* `/var/stack` qui contient la déclaration de vos services ;
 * `/var/lib/docker/volumes` où se trouvent les volumes montés dans vos conteneurs, c'est-à-dire vos données.
 
 N'oubliez pas de mettre à jour régulièrement les images de vos services :
