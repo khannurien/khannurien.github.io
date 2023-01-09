@@ -2,6 +2,10 @@
 title: Programmer le Cloud
 parent: Cloud
 grand_parent: Labs
+
+todo:
+  - Add a comprehensive section on SSH keys
+  - Ask students to create their sets of keys and upload them to GitHub
 ---
 
 # Programmer le Cloud

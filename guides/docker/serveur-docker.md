@@ -33,7 +33,7 @@ Faîtes pointer votre nom de domaine ainsi que tous ses sous-domaines vers votre
 |---|---------------|----------|
 | A | *.example.com | 10.0.0.1 |
 
-@ correspond à la racine (c'est-à-dire "chezoim.com") chez la plupart des bureaux d'enregistrement.
+@ correspond à la racine (c'est-à-dire "chezoim.com") chez la plupart des bureaux d'enregistrement. `10.0.0.1` correspond à l'[adresse IP publique](https://unix.stackexchange.com/a/194136/350724) obtenue par la box de votre opérateur.
 
 Il faudra ouvrir deux ports sur votre routeur ou box : 80 (HTTP) et 443 (HTTPS). La marche à suivre dépend du modèle, mais [tout est documenté](https://fr.wikihow.com/ouvrir-des-ports).
 
@@ -84,7 +84,7 @@ Pour résumer, voici les images Docker que l'on va utiliser :
 * Dashboard Docker : [Portainer](https://hub.docker.com/r/portainer/portainer-ce) ;
 * Synchronisation et partage : [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud).
 
-Puisque OpenVPN et Traefik vont écouter sur des ports réservés (443 et 80), un simple utilisateur ne pourra pas créer les conteneurs. On va donc passer en root avant d'effectuer la suite des manipulations.
+Puisque OpenVPN et Traefik vont écouter sur des ports réservés (443 et 80), un simple utilisateur ne pourra pas créer les conteneurs. On va donc passer en `root` avant d'effectuer la suite des manipulations.
 
 ## Démarrage
 
