@@ -137,7 +137,9 @@ Dans l'écosystème Docker, une image correspond à une "recette" décrite dans 
 
 Les instructions décrites dans un `Dockerfile` sont exécutées séquentiellement, à l'image de ce que pourrait faire un script shell pour préparer un environnement de travail. Contrairement à un script shell, impératif, le `Dockerfile` fournit une interface plus *déclarative* : certaines instructions masquent une grande complexité.
 
-En voici une première : la base de tout conteneur Docker est un système d'exploitation. Pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation. C'est la première ligne de tout `Dockerfile` : l'instruction `FROM`.
+Lors de la construction de l'image du conteneur, chaque commande du `Dockerfile` produit une "couche" dans le système de fichiers. La couche de base est une distribution Linux, et chacune des instructions ajoute les couches de configuration nécessaires à l'exécution de l'application que l'on souhaite empaqueter.
+
+Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` : c'est elle qui définit la couche de départ de votre image. Pour construire une image de votre application, vous allez vous appuyer sur la distribution **Alpine Linux**, destinée aux systèmes légers et souvent utilisée dans le contexte de la conteneurisation.
 
 ### Déroulé
 
