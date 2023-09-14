@@ -175,7 +175,9 @@ Deux notions sont importantes pour cette étape :
 
 2. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton "Nouvelle" et suivez le guide :
     * 2048 Mo de mémoire vive devraient suffire ;
-    * Choisissez de créer un *disque dur virtuel*, de type **VDI**, dynamiquement alloué avec une taille de départ de 10 Go.
+    * Choisissez de créer un *disque dur virtuel*, de type **VDI**, dynamiquement alloué avec une taille de départ de 20 Go.
+
+⚠️ Cochez la case "*Skip Unattended Installation* (VirtualBox 7.0 et plus) ! Sans cela, VirtualBox essaiera d'installer l'OS invité à votre place. C'est très pratique, mais contraire à l'objectif de ce TD... 
 
 3. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.1-live-server-amd64.iso`.
 
