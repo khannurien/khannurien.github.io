@@ -420,7 +420,7 @@ Voici un appel au script en mode batch pour réaliser l'opération de mise à jo
 vincent@LAP-308:~/linux-admin$ ./linux-admin.sh --update-repositories
 ```
 
-Vous devez donc détecter le passage -- ou l'absence de passage -- de *flags* à l'appel du script pour passer dans le mode approprié.
+Vous devez donc détecter le passage -- ou l'absence de passage -- de *flags* à l'appel du script pour passer dans le mode approprié. Les arguments passés au script sont séparés par des **espaces** et interprétés de manière **positionnelle** par Bash. Ils sont numérotés de 1 à 9 dans les variables spéciales `$1`, `$2`, `$3`, ..., `$9`. La variable `$0` contient le chemin d'appel du script.
 
 ### Qualité du code
 
