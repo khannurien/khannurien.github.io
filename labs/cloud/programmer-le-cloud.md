@@ -32,6 +32,11 @@ Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gra
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
 * un compte [Fly.io](https://fly.io/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
+> **Note**
+> Alternatives to Fly.io : 
+> Vous pouvez également visiter [Railway](https://railway.app) ou [Render](https://render.com), qui sont des plateformes similaires.
+> En fonction de leur évolution, un plan gratuit devrait toujours être disponible.
+
 Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Fly.io, il peut y avoir une latence entre la demande de création de compte et sa validation.
 
 Pour développer localement, sur votre machine, il vous faudra installer :
@@ -298,6 +303,9 @@ Cette plateforme sera **Fly.io**. En particulier, leur offre *PaaS* propose un t
 Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, une image Docker sera recréée et déployée chez Fly.io.
 
 ### Déroulé
+
+> [!NOTE]
+> Vous pouvez vous référer aux documentations de Railway (https://docs.railway.app/develop/cli) et de Render (https://render.com/docs/cli) pour avoir plus d'informations concernant ces alternatives.
 
 1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
 
