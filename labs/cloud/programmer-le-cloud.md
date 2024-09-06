@@ -305,7 +305,7 @@ Vous allez d'abord déployer votre application à la main, afin de vous familiar
 ### Déroulé
 
 > [!NOTE]
-> Vous pouvez vous référer aux documentations de Railway (https://docs.railway.app/develop/cli) et de Render (https://render.com/docs/cli) pour avoir plus d'informations concernant ces alternatives.
+> Vous pouvez vous référer aux documentations de [Railway](https://docs.railway.app/develop/cli), [Vercel](https://vercel.com/docs/getting-started-with-vercel) ou encore [Render](https://render.com/docs/cli) pour avoir plus d'informations concernant ces alternatives.
 
 1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
 
