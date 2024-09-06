@@ -197,7 +197,7 @@ Vous allez pouvoir vous lancer dans l'installation du système à proprement par
 
 2. Le type d'installation à sélectionner est la première, *Ubuntu Server* (et non pas *minimized*) :
 
-    ![](./images/virtualbox/virtualbox-server-minimized.png)
+    ![](./images/virtualbox/virtualbox-server-ubuntu.png)
 
 3. La connexion au réseau devrait s'effectuer d'elle-même. Vous n'avez pas besoin de préciser d'adresse de proxy. L'adresse du miroir d'archive Ubuntu est correcte par défaut.
 
