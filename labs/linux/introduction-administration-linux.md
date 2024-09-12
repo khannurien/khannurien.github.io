@@ -171,7 +171,7 @@ Deux notions sont importantes pour cette étape :
 * Image disque : un fichier, souvent d'extension `.iso` ou `.img`, qui représente un média amorçable (*bootable*) que l'on pourrait copier sur un disque flash par exemple. Il contient un chargeur d'amorçage et un système d'exploitation. Ces images disques sont utilisées pour installer un nouvel OS sur une machine, physique ou virtuelle ;
 * Disque virtuel : un fichier, souvent d'extension `.vdi`, qui représente le disque d'amorçage d'un système d'exploitation.
 
-1. Téléchargez une image disque de [Ubuntu Server](https://ubuntu.com/download/server). Note : elle est à votre disposition sur un disque partagé de l'école, sous `N:\inf\Linux`.
+1. Téléchargez une image disque de [Ubuntu Server 22.04](https://releases.ubuntu.com/22.04/ubuntu-22.04.4-live-server-amd64.iso). Note : elle est à votre disposition sur un disque partagé de l'école, sous `N:\inf\Linux`.
 
 2. Dans la fenêtre principale de VirtualBox, cliquez sur le bouton "Nouvelle" et suivez le guide :
     * 2048 Mo de mémoire vive devraient suffire ;
@@ -179,7 +179,7 @@ Deux notions sont importantes pour cette étape :
 
 ⚠️ Cochez la case "*Skip Unattended Installation* (VirtualBox 7.0 et plus) ! Sans cela, VirtualBox essaiera d'installer l'OS invité à votre place. C'est très pratique, mais contraire à l'objectif de ce TD... 
 
-3. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.1-live-server-amd64.iso`.
+3. Démarrez votre VM fraîchement créée. VirtualBox va vous demander de choisir un *disque de démarrage*. Ajoutez l'image disque que vous avez téléchargée, `ubuntu-22.04.4-live-server-amd64.iso`.
 
     > ⚠️ Si le démarrage de la VM se solde par une erreur *Kernel panic*, vérifiez que VirtualBox lui a bien attribué **2 CPU**. Vous trouverez ce paramètre dans la configuration de la machine virtuelle, sous *Système > Processeur*.
 
