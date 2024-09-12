@@ -162,7 +162,9 @@ Il existe deux abstractions pour un hyperviseur :
 
 ![](./images/hypervisors.png)
 
-1. Installez [VirtualBox](https://www.virtualbox.org/wiki/Downloads) : choisissez le *Platform package* adapté à votre système hôte.
+1. Installez [VirtualBox](https://www.virtualbox.org/wiki/Downloads) : choisissez le *Platform package* adapté à votre système hôte ;
+2. Installez [VirtualBox Extension Pack](https://download.virtualbox.org/virtualbox/7.1.0/Oracle_VirtualBox_Extension_Pack-7.1.0.vbox-extpack), disponible sur la même page ;
+3. En cas d'erreur à propos d'un paquet manquant au démarrage de l'installation, téléchargez et installez la version adaptée à l'architecture de votre machine (probablement `X64`) de [Microsoft Visual C++ Redistributable](https://learn.microsoft.com/en-us/cpp/windows/latest-supported-vc-redist?view=msvc-170#latest-microsoft-visual-c-redistributable-version).
 
 #### Création de la VM
 
