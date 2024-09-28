@@ -17,7 +17,7 @@ Dans ce guide, je vous propose d'utiliser Docker et Docker Compose pour déploye
 
 ## Architecture
 
-* [Traefik](https://hub.docker.com/_/traefik), un *reverse proxy* s'intercale entre Internet et les différents services que l'on souhaite exposer ;
+* [Traefik](https://hub.docker.com/_/traefik), un *reverse proxy* qui va s'intercaler entre Internet et les différents services que l'on souhaite exposer ;
 * [WireGuard](https://github.com/wg-easy/wg-easy), un VPN moderne, que l'on va configurer pour qu'il soit accessible depuis la majorité des réseaux publics ;
 * [Netdata](https://hub.docker.com/r/netdata/netdata), une plateforme de monitoring complète et peu gourmande en ressources ;
 * [Portainer](https://hub.docker.com/r/portainer/portainer-ce), un *dashboard* web pour Docker ;
@@ -337,7 +337,7 @@ On sauvegarde également dans un volume le fichier `acme.json` qui contient nos 
 
 ## Configuration
 
-### OpenVPN
+### WireGuard
 
 Remplacez `example.com` par votre nom de domaine dans la configuration de l'environnement pour WireGuard. Utilisez [la documentation](https://github.com/wg-easy/wg-easy/blob/master/How_to_generate_an_bcrypt_hash.md) fournie avec l'image pour générer le hash du mot de passe de l'interface d'administration.
 
