@@ -2,7 +2,7 @@
 title: Un serveur avec Docker
 parent: Docker
 grand_parent: Guides
-published: false
+published: true
 ---
 
 # Un serveur avec Docker
@@ -17,19 +17,19 @@ Dans ce guide, je vous propose d'utiliser Docker et Docker Compose pour déploye
 
 ## Architecture
 
-(figure)
-
 * [Traefik](https://hub.docker.com/_/traefik), un *reverse proxy* s'intercale entre Internet et les différents services que l'on souhaite exposer ;
-* [OpenVPN](https://hub.docker.com/r/kylemanna/openvpn), un VPN configuré pour utiliser TCP, et qui écoute sur le port HTTPS standard, afin d'être accessible depuis n'importe quel réseau, même limité ;
+* [WireGuard](https://github.com/wg-easy/wg-easy), un VPN moderne, que l'on va configurer pour qu'il soit accessible depuis la majorité des réseaux publics ;
+* [Netdata](https://hub.docker.com/r/netdata/netdata), une plateforme de monitoring complète et peu gourmande en ressources ;
 * [Portainer](https://hub.docker.com/r/portainer/portainer-ce), un *dashboard* web pour Docker ;
-* [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud), une plateforme de stockage (fichiers, photos...) et de partage (calendriers, contacts...) ;
-* [MariaDB](https://hub.docker.com/_/mariadb), une base de données qui sera utilisée par Nextcloud.
+* [Nextcloud](https://github.com/linuxserver/docker-nextcloud), une plateforme de stockage (documents, photos, etc.) et de partage (calendriers, contacts, etc.) ;
+* [MariaDB](https://hub.docker.com/_/mariadb), une base de données qui sera utilisée par Nextcloud ;
+* [Docker Volume Backup](https://github.com/offen/docker-volume-backup), une image Docker pour la sauvegarde automatique des données des conteneurs.
 
 ## Pré-requis
 
-1. Il voudra faudra un nom de domaine (optez pour [l'un](https://www.bookmyname.com/) [des](https://www.gandi.net/fr) [nombreux](https://www.namecheap.com/) [fournisseurs](https://www.ovhcloud.com/fr/domains/), parfois même [gratuit](https://www.dynu.com/)). Pour l'exemple, mon domaine sera `example.com`.
+1. Il voudra faudra un nom de domaine (optez pour [l'un](https://www.bookmyname.com/) [des](https://www.gandi.net/fr) [nombreux](https://www.namecheap.com/) [fournisseurs](https://www.ovhcloud.com/fr/domains/), certains sont même [gratuits](https://www.dynu.com/)). Pour l'exemple, mon domaine sera `example.com`.
 
-Faîtes pointer votre nom de domaine ainsi que tous ses sous-domaines vers votre adresse IP publique. La marche est à suivre diffère selon les fournisseurs (registrars), mais en gros, dans la configuration DNS de votre domaine, vous devrez créer deux enregistrements A de type :
+Faîtes pointer votre nom de domaine ainsi que tous ses sous-domaines vers votre adresse IP publique. La marche est à suivre diffère selon les fournisseurs (*registrars*), mais en gros, dans la configuration DNS de votre domaine, vous devrez créer deux enregistrements `A` de type :
 
 | Type | Domaine       | Adresse  |
 |------|---------------|----------|
@@ -38,7 +38,7 @@ Faîtes pointer votre nom de domaine ainsi que tous ses sous-domaines vers votre
 
 `@` correspond à la racine (c'est-à-dire *example.com*) chez la plupart des bureaux d'enregistrement. `10.0.0.1` correspond à l'[adresse IP publique](https://unix.stackexchange.com/a/194136/350724) obtenue par la box de votre opérateur.
 
-2. Il faudra ouvrir deux ports sur votre routeur ou box : 80 (HTTP) et 443 (HTTPS). La marche à suivre dépend du modèle, mais [tout est documenté](https://fr.wikihow.com/ouvrir-des-ports).
+2. Il faudra ouvrir deux ports sur votre routeur ou box : 80 (`http`) et 443 (`https`). La marche à suivre dépend du modèle, mais [tout est documenté](https://fr.wikihow.com/ouvrir-des-ports).
 
 3. Vous avez à votre disposition une machine GNU/Linux. Le guide fonctionne pour Ubuntu 22.04.
 
@@ -79,15 +79,7 @@ sudo docker run hello-world
 
 ## Préambule
 
-Pour résumer, voici les images Docker que l'on va utiliser :
-
-* Serveur VPN : [OpenVPN](https://hub.docker.com/r/kylemanna/openvpn) ;
-* Reverse proxy : [Traefik](https://hub.docker.com/_/traefik) ;
-* Base de données : [MariaDB](https://hub.docker.com/_/mariadb) ;
-* Dashboard Docker : [Portainer](https://hub.docker.com/r/portainer/portainer-ce) ;
-* Synchronisation et partage : [Nextcloud](https://hub.docker.com/r/linuxserver/nextcloud).
-
-Puisque OpenVPN et Traefik vont écouter sur des ports réservés (443 et 80), un simple utilisateur ne pourra pas créer leurs conteneurs. On va donc passer en `root` avant d'effectuer la suite des manipulations.
+Puisque Traefik va écouter sur des ports réservés (443 et 80), un simple utilisateur ne pourra pas créer leurs conteneurs. On va donc passer en `root` avant d'effectuer la suite des manipulations.
 
 ## Démarrage
 
@@ -108,22 +100,10 @@ On crée le fichier `/var/stack/docker-compose.yml` avec la définition de l'ens
 
 La configuration de Traefik est dynamique : on la passe à la création du conteneur. Les labels que l'on ajoute à chacun des conteneurs permettent à Traefik d'identifier les services et de créer les routes nécessaires.
 
-
-
-https://www.reddit.com/r/Traefik/comments/di6zds/openvpn_server_behind_traefik/
-https://www.reddit.com/r/Traefik/comments/g6rr3f/openvpn_with_traefik_22_using_udp/
-https://github.com/kylemanna/docker-openvpn/blob/1228577d4598762285958ad98724ab37e7b11354/docs/tcp.md
-https://community.traefik.io/t/traefik-does-not-work-with-mariadb/13945
-
-
-
-
 ```yaml
-version: '3'
-
 services:
   traefik:
-    image: traefik:v2.9
+    image: traefik:latest
     command:
       - "--api"
       - "--providers.docker"
@@ -153,30 +133,86 @@ services:
     environment:
       - TZ=Europe/Paris
     labels:
+      - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.rule=Host(`traefik.example.com`)"
       - "traefik.http.routers.traefik.service=api@internal"
       - "traefik.http.routers.traefik.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
       - "traefik.http.routers.traefik.middlewares=admin"
       - "traefik.http.middlewares.admin.basicauth.users=toto:$$2y$$05$$LJ8gDZQN7puZmTM.OygwXu2uQQt1aTPDeA2uR6wExVSH6NRS0Ku8C"
 
-  openvpn:
-    cap_add:
-     - NET_ADMIN
-    image: kylemanna/openvpn:2.4
+  wireguard:
+    image: ghcr.io/wg-easy/wg-easy:latest
     restart: always
-    depends_on:
-      - "traefik"
-    labels:
-      #- "traefik.enable=true"
-      - "traefik.tcp.services.openvpn.loadbalancer.server.port=443"
-      - "traefik.tcp.routers.openvpn.rule=HostSNI(`*`)"
-      - "traefik.tcp.routers.openvpn.entrypoints=websecure"
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    sysctls:
+      - net.ipv4.ip_forward=1
+      - net.ipv4.conf.all.src_valid_mark=1
+    ports:
+      - "123:123/udp"
+    expose:
+      - "51821"
     volumes:
-      - openvpn_data:/etc/openvpn
+      - wireguard_config:/etc/wireguard
+    environment:
+      - LANG=fr
+      # Adresse publique du serveur
+      - WG_HOST=example.com
+      # À compléter impérativement en utilisant la doc suivante :
+      # https://github.com/wg-easy/wg-easy/blob/master/How_to_generate_an_bcrypt_hash.md
+      - PASSWORD_HASH=''
+      # Le port 123/udp est traditionnellement utilisé par NTP
+      # Il a de grande chance d'être ouvert sur un réseau public
+      - WG_PORT=123
+      # Utiliser le DNS de la box (IP à vérifier)
+      - WG_DEFAULT_DNS=192.168.1.254
+      # Graphiques dans le dashboard
+      - UI_TRAFFIC_STATS=true
+      - UI_CHART_TYPE=2 # (0 Charts disabled, 1 # Line chart, 2 # Area chart, 3 # Bar chart)
+    labels:
+      - "traefik.http.services.wireguard.loadbalancer.server.port=51821"
+      - "traefik.http.routers.wireguard.entrypoints=websecure"
+      - "traefik.http.routers.wireguard.rule=Host(`vpn.example.com`)"
+      - "traefik.http.routers.wireguard.tls=true"
+      - "traefik.http.routers.wireguard.tls.certresolver=letsencrypt"
+
+  netdata:
+    image: netdata/netdata:latest
+    restart: always
+    hostname: example.com
+    pid: host
+    cap_add:
+      - SYS_PTRACE
+      - SYS_ADMIN
+    security_opt:
+      - apparmor:unconfined
+    expose:
+      - "19999"
+    volumes:
+      - netdata_config:/etc/netdata
+      - netdata_lib:/var/lib/netdata
+      - netdata_cache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+      - /var/log:/host/var/log:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /run/dbus:/run/dbus:ro
+    labels:
+      - "traefik.http.services.netdata.loadbalancer.server.port=19999"
+      - "traefik.http.routers.netdata.rule=Host(`monitoring.example.com`)"
+      - "traefik.http.routers.netdata.tls=true"
+      - "traefik.http.routers.netdata.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.netdata.entrypoints=websecure"
+      - "traefik.http.routers.netdata.middlewares=admin"
+      - "traefik.http.middlewares.admin.basicauth.users=toto:$$2y$$05$$LJ8gDZQN7puZmTM.OygwXu2uQQt1aTPDeA2uR6wExVSH6NRS0Ku8C"
 
   portainer:
-    image: portainer/portainer-ce:2.16
+    image: portainer/portainer-ce:latest
     command: -H unix:///var/run/docker.sock
     restart: always
     expose:
@@ -187,17 +223,108 @@ services:
       - portainer_data:/data
     labels:
       - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+      - "traefik.http.routers.portainer.entrypoints=websecure"
       - "traefik.http.routers.portainer.rule=Host(`portainer.example.com`)"
       - "traefik.http.routers.portainer.tls=true"
       - "traefik.http.routers.portainer.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.portainer.entrypoints=websecure"
+
+  nextcloud:
+    image: ghcr.io/linuxserver/nextcloud:latest
+    restart: always
+    expose:
+      - "443"
+    volumes:
+      - nextcloud_config:/config
+      - nextcloud_data:/data
+    environment:
+      - PUID=1000
+      - GUID=1000
+      - TZ=Europe/Paris
+    labels:
+      - "traefik.http.services.nextcloud.loadbalancer.server.port=443"
+      - "traefik.http.services.nextcloud.loadbalancer.server.scheme=https"
+      - "traefik.http.routers.nextcloud.entrypoints=websecure"
+      - "traefik.http.routers.nextcloud.rule=Host(`cloud.example.com`)"
+      - "traefik.http.routers.nextcloud.tls=true"
+      - "traefik.http.routers.nextcloud.tls.certresolver=letsencrypt"
+      - "traefik.http.middlewares.nc-rep.redirectregex.regex=https://(.*)/.well-known/(card|cal)dav"
+      - "traefik.http.middlewares.nc-rep.redirectregex.replacement=https://$$1/remote.php/dav/"
+      - "traefik.http.middlewares.nc-rep.redirectregex.permanent=true"
+      - "traefik.http.middlewares.nc-header.headers.referrerPolicy=no-referrer"
+      - "traefik.http.middlewares.nc-header.headers.stsSeconds=31536000"
+      - "traefik.http.middlewares.nc-header.headers.forceSTSHeader=true"
+      - "traefik.http.middlewares.nc-header.headers.stsPreload=true"
+      - "traefik.http.middlewares.nc-header.headers.stsIncludeSubdomains=true"
+      - "traefik.http.middlewares.nc-header.headers.browserXssFilter=true"
+      - "traefik.http.middlewares.nc-header.headers.customRequestHeaders.X-Forwarded-Proto=https"
+      - "traefik.http.middlewares.nc-header.headers.customResponseHeaders.X-Robots-Tag=noindex,nofollow"
+      - "traefik.http.routers.nextcloud.middlewares=nc-rep,nc-header"
+      # Arrêter Nextcloud pendant les sauvegardes nocturnes
+      - "docker-volume-backup.stop-during-backup=true"
+
+  mariadb:
+    image: mariadb:latest
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-read-only-compressed=OFF
+    restart: always
+    expose:
+      - "3306"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - nextcloud_db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=nextcloud
+      - MYSQL_PASSWORD=nextcloud
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+      - MARIADB_AUTO_UPGRADE=true
+    labels:
+      # Pas besoin de rendre la base de données accessible depuis l'extérieur
+      - "traefik.enable=false"
+      # Arrêter Nextcloud pendant les sauvegardes nocturnes
+      - "docker-volume-backup.stop-during-backup=true"
+
+  backup:
+    image: offen/docker-volume-backup:latest
+    restart: always
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      # Volumes à sauvegarder
+      - nextcloud_config:/backup/nextcloud_config-backup:ro
+      - nextcloud_data:/backup/nextcloud_data-backup:ro
+      - nextcloud_db:/backup/nextcloud_db-backup:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      # On suppose un disque monté sous /media/backups pour les sauvegardes
+      - /media/backups/backup:/backup
+      - /media/backups/archive:/archive
+      - /media/backups/tmp:/tmp
+    environment:
+      # Configuration pour une sauvegarde locale des données toutes les nuits à 2:30
+      # La rotation des archives des sauvegardes a lieu tous les 7 jours
+      # Voir la documentation : https://offen.github.io/docker-volume-backup/
+      - BACKUP_CRON_EXPRESSION="30 02 * * *"
+      - BACKUP_FILENAME="backup-%Y-%m-%dT%H-%M-%S.tar.gz"
+      - BACKUP_LATEST_SYMLINK="backup.latest.tar.gz"
+      - BACKUP_ARCHIVE="/archive"
+      - BACKUP_RETENTION_DAYS="7"
+      - EXEC_FORWARD_OUTPUT="true"
+    labels:
+      # Rien à voir depuis l'extérieur
+      - "traefik.enable=false"
 
 volumes:
   traefik_logs:
   traefik_certs:
-  openvpn_data:
+  wireguard_config:
+  netdata_config:
+  netdata_lib:
+  netdata_cache:
   portainer_data:
-
+  nextcloud_config:
+  nextcloud_data:
+  nextcloud_db:
+  nextcloud_redis:
 ```
 
 À noter qu'on utilise une authentification basique pour l'interface web de Traefik. Pour générer un identifiant, utilisez la commande suivante – ici, l'utilisateur `toto` avec comme mot de passe `blabla` :
@@ -212,22 +339,7 @@ On sauvegarde également dans un volume le fichier `acme.json` qui contient nos 
 
 ### OpenVPN
 
-On génère la configuration d'OpenVPN (TCP sur le port `443`, "partagé" avec Traefik) :
-
-```shell
-# générez la configuration du serveur OpenVPN pour utiliser TCP
-docker-compose run --rm openvpn ovpn_genconfig -u tcp://vpn.example.com:443
-
-# rentrez un mot de passe solide et faîtes correspondre le Common Name demandé au nom d'hôte de votre serveur (i.e. le résultat de la commande hostname)
-docker-compose run --rm -it openvpn ovpn_initpki
-```
-
-On peut prendre de l'avance et créer un certificat pour un client nommé `toto`. Le fichier `.ovpn` généré est auto-suffisant – vous pourrez l'importer dans n'importe quel client OpenVPN moderne :
-
-```shell
-docker-compose run --rm openvpn easyrsa build-client-full toto
-docker-compose run --rm openvpn ovpn_getclient toto > toto.ovpn
-```
+Remplacez `example.com` par votre nom de domaine dans la configuration de l'environnement pour WireGuard. Utilisez [la documentation](https://github.com/wg-easy/wg-easy/blob/master/How_to_generate_an_bcrypt_hash.md) fournie avec l'image pour générer le hash du mot de passe de l'interface d'administration.
 
 ### Nextcloud
 
@@ -239,28 +351,15 @@ docker-compose up -d
 
 Le cycle de vie d'un conteneur est court : on peut le détruire et le recréer comme on le souhaite, et il s'initialisera de la même manière à chaque lancement.
 
-Il vous reste à accéder à Portainer et Nextcloud pour initialiser leur configuration. Pour Nextcloud, n'oubliez pas de préciser les informations sur la base de données. Le conteneur MariaDB et le conteneur Nextcloud sont connectés au même réseau, on peut donc compter sur Docker pour la résolution des noms et l'ouverture du port :
+Il vous reste à accéder à Portainer et Nextcloud pour initialiser leur configuration. Pour Nextcloud, n'oubliez pas de préciser les informations sur la base de données. Le conteneur MariaDB et le conteneur Nextcloud sont connectés au même réseau, on peut donc compter sur Docker pour la résolution des noms et l'ouverture du port : le nom d'hôte du serveur est `mariadb`, port `3306`.
 
-(figure)
+## Sauvegardes
 
-Il est fort probable que la finalisation prenne trop de temps et que vous obteniez une erreur 504. Laissez passer quelques minutes, l'installation de Nextcloud se termine en tâche de fond.
+À ce stade, dans `/var/stack`, vous avez un fichier `docker-compose.yml` qui définit les services à exécuter. Vos données sont stockées dans les *volumes nommés* définis par Docker Compose, sous le répertoire `/var/lib/docker/volumes`.
 
-
-## État des lieux
-
-À ce stade, dans `/var/stack`, vous avez deux fichiers :
-
-* `docker-compose.yml` qui définit les services à exécuter ;
-* `toto.ovpn` qui est votre fichier de configuration pour un client OpenVPN.
-
-Vos données sont stockées dans les volumes nommés définis par Docker Compose, sous le répertoire /var/lib/docker/volumes.
+Chaque nuit, les données de Nextcloud et sa base de données sont sauvegardées sur le disque `/media/backups`.
 
 ## Et ensuite ?
-
-Mettez en place des sauvegardes – c'est simple, vous avez deux répertoires à surveiller :
-
-* `/var/stack` qui contient la déclaration de vos services ;
-* `/var/lib/docker/volumes` où se trouvent les volumes montés dans vos conteneurs, c'est-à-dire vos données.
 
 N'oubliez pas de mettre à jour régulièrement les images de vos services :
 
@@ -281,4 +380,4 @@ Enfin en cas de problème, consultez les journaux des conteneurs :
 docker-compose logs
 ```
 
-Pour garder un œil sur l'activité de vos conteneurs, je vous recommande [ctop](https://github.com/bcicen/ctop).
+Pour jeter un œil rapidement sur l'activité de vos conteneurs, je vous recommande [ctop](https://github.com/bcicen/ctop).
