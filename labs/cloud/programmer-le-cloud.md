@@ -9,7 +9,6 @@ todo:
 ---
 
 # Programmer le Cloud
-{: .no_toc }
 
 <img align="center" src="./images/xkcd-automation.png" />
 
@@ -151,13 +150,24 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 0. Installez Docker et testez son fonctionnement :
   
     ```shell
-    sudo apt update
-    sudo apt install apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-    sudo apt update
-    sudo apt install docker-ce
-    # vérifiez le fonctionnement du daemon (sauf WSL2) :
+    # Ajout à apt de la clef GPG des dépôts officiels Docker
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Ajout des dépôts officiels Docker aux sources apt
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    # Installation de la dernière version de Docker
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # Vérifier le fonctionnement du daemon (sauf WSL2) :
     sudo systemctl status docker
     ```
 
