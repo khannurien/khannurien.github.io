@@ -9,6 +9,7 @@ todo:
 ---
 
 # Programmer le Cloud
+{: .no_toc }
 
 <img align="center" src="./images/xkcd-automation.png" />
 
