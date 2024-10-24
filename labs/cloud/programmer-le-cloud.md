@@ -232,7 +232,7 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
     sudo docker run -p 8123:8000 -m1024m --cpus=1 sysinfo-api:0.0.1
     ```
 
-> 💡 Pour vous aider à répondre à cette question, regardez les derniers slides du cours, au sujet de l'isolation des processus sous Linux. Vous pouvez également regarder l'implémentation de la fonction `bocker_run` du [projet `bocker`](https://github.com/p8952/bocker/blob/master/bocker). C'est une implémentation "naïve", très simple, d'un système de conteneurisation semblable à Docker. Vous pouvez y voir les primitives fournies par Linux et utilisées par l'auteur pour réaliser l'isolation des processus (*i.e.* des conteneurs). Que signifient `cgreate` ? `cgset` ? `cgexec` ?
+    > 💡 Pour vous aider à répondre à cette question, regardez les derniers slides du cours, au sujet de l'isolation des processus sous Linux. Vous pouvez également regarder l'implémentation de la fonction `bocker_run` du [projet `bocker`](https://github.com/p8952/bocker/blob/master/bocker). C'est une implémentation "naïve", très simple, d'un système de conteneurisation semblable à Docker. Vous pouvez y voir les primitives fournies par Linux et utilisées par l'auteur pour réaliser l'isolation des processus (*i.e.* des conteneurs). Que signifient `cgreate` ? `cgset` ? `cgexec` ?
 
 4. Inspectez votre image, d'abord avec la CLI de Docker :
 
