@@ -191,7 +191,7 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 
     ```Dockerfile
     # image de départ
-    FROM alpine:3.15
+    FROM alpine:3.20
 
     # chemin de travail
     WORKDIR ...
@@ -254,13 +254,17 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 
     ```Dockerfile
     # stage compilation
-    FROM alpine:3.15 as builder
+    FROM alpine:3.20 AS builder
+    # toutes les étapes nécessaires à la compilation de l'application
     # ...
 
     # stage exécution
-    FROM alpine:3.15 as runner
+    FROM alpine:3.20 AS runner
+    # toutes les étapes nécessaires à l'exécution de l'application
     # ...
-    COPY --from=builder --chown=node:node ...
+
+    # indice : pour récupérer des fichiers depuis le stage précédent
+    COPY --from=builder --chown=node:node [chemin source] [chemin destination]
     ```
 
 6. Vous allez maintenant pouvoir publier votre image Docker sur un dépôt (Docker Hub). Commencez par la tagger avec votre nom d'utilisateur (pas le mien :-)) :
