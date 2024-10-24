@@ -241,8 +241,8 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
     Puis utilisez l'outil `dive` :
 
     ```shell
-    wget https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb
-    sudo apt install ./dive_0.10.0_linux_amd64.deb
+    wget https://github.com/wagoodman/dive/releases/download/v0.12.0/dive_0.12.0_linux_amd64.deb
+    sudo apt install ./dive_0.12.0_linux_amd64.deb
     dive sysinfo-api:0.0.1
     ```
 
