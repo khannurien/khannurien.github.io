@@ -325,19 +325,19 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 3. Vérifiez que votre image est bien publiée sur les deux registres lorsque vous poussez un changement sur votre dépôt.
 
-## TD4 : déploiement continu sur PaaS avec Microsoft Azure
+## TD4 : déploiement continu sur PaaS
 
 ### Objectif
 
 Pour cette dernière étape, nous allons nous intéresser au **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
 
-Cette plateforme sera **Microsoft Azure**. Une adresse e-mail `@ensta-bretagne.org` permet à tout étudiant à l'école de profiter de l'équivalents de 100$ de crédits pour expérimenter avec les services du fournisseur.
+Cette plateforme sera **Microsoft Azure**. Une adresse e-mail `@ensta-bretagne.org` permet à tout étudiant à l'école de profiter de l'équivalent de 100$ de crédits pour expérimenter avec les services du fournisseur. [Créez votre compte](https://azure.microsoft.com/fr-fr/free/students) pour bénéficier de ces crédits avant de passer au déroulé du TD.
 
 Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, l'image Docker de l'application sera recréée et déployée sur Azure. Votre application sera ainsi accessible par tous, *via* Internet.
 
 ### Déroulé
 
-1. Commencez par un déploiement "à la main" de votre application :
+1. Commencez par un déploiement "à la main" de votre application. Ci-dessous, un résumé inspiré du [guide de démarrage](https://learn.microsoft.com/fr-fr/azure/container-instances/container-instances-quickstart-portal) :
     * rendez-vous sur la [page d'accueil d'Azure](https://portal.azure.com/#home) ;
     * cliquez sur "Créer une ressource" et choisissez "Instances de conteneurs" ;
     * créez un nouveau "Groupe de ressources" (son nom -- comme celui du conteneur par ailleurs -- importe peu dans notre cas) ;
