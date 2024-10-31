@@ -32,11 +32,6 @@ Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gra
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
 * un compte [Fly.io](https://fly.io/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
-> **Note**
-> Alternatives to Fly.io : 
-> Vous pouvez également visiter [Railway](https://railway.app) ou [Render](https://render.com), qui sont des plateformes similaires.
-> En fonction de leur évolution, un plan gratuit devrait toujours être disponible.
-
 Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Fly.io, il peut y avoir une latence entre la demande de création de compte et sa validation.
 
 Pour développer localement, sur votre machine, il vous faudra installer :
@@ -298,6 +293,8 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 ### Déroulé
 
+#### Intégration continue
+
 0. Suivez [le tutoriel de *GitHub Actions*](https://docs.github.com/en/actions/quickstart) pour écrire votre premier *workflow*.
 
 1. Inspirez-vous du *workflow* que vous avez écrit dans le cadre du tutoriel pour correspondre aux exigences suivantes :
@@ -311,7 +308,19 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 3. Relisez la question 6 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
-## TD4 : déploiement sur PaaS avec Fly.io
+#### Livraison continue
+
+1. Assurez-vous que que votre premier *workflow* s'exécute correctement et vérifie que votre application passe bien sa suite de tests unitaires.
+
+2. Créez un deuxième *workflow* qui s'exécutera dans un second temps. Ce *workflow* devra :
+
+    * construire l'image Docker de votre application ;
+    * la publier sur [Docker Hub](https://hub.docker.com/) ;
+    * la publier sur [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+
+    ⚠️ Il faudra veiller à ne pas divulguer de secrets (mots de passe, clefs d'API, etc.) dans vos fichiers actions. Lisez attentivement la [documentation de GitHub au sujet des secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions).
+
+## TD4 : déploiement continu sur PaaS avec Fly.io
 
 ### Objectif
 
@@ -323,7 +332,7 @@ Vous allez d'abord déployer votre application à la main, afin de vous familiar
 
 ### Déroulé
 
-> Des alernatives à Fly.io existent: [Railway](https://docs.railway.app/develop/cli), [Vercel](https://vercel.com/docs/getting-started-with-vercel) ou encore [Render](https://render.com/docs/cli) en font partie.
+> Des alernatives à Fly.io existent : [Railway](https://docs.railway.app/develop/cli), [Vercel](https://vercel.com/docs/getting-started-with-vercel) ou encore [Render](https://render.com/docs/cli) en font partie.
 
 1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
 
