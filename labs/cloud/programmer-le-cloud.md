@@ -36,6 +36,7 @@ Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes im
 
 Pour développer localement, sur votre machine, il vous faudra installer :
 
+* [Visual Studio Code](https://code.visualstudio.com/) ;
 * [Node.js](https://nodejs.org/en/) (version LTS) ;
 * [Docker](https://docs.docker.com/get-docker/).
 
@@ -45,9 +46,7 @@ N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Window
 
 * [Installer WSL 2 -- Microsoft Docs](https://docs.microsoft.com/fr-fr/windows/wsl/install)
 
-Si vous travaillez sur une machine de salle informatique, vous pouvez créer une VM VirtualBox à partir d'[une image disque Ubuntu Server 20.04.3](https://sourceforge.net/projects/osboxes/files/v/vb/59-U-u-svr/20.04/20.04.3/64bit.7z/download). Pour cette VM, le login est "osboxes", le mot de passe "osboxes.org". Attention, le clavier est par défaut en qwerty, il faut donc taper "osboxes:org" sur un clavier français. Utilisez ensuite la commande `sudo loadkeys fr` pour passer en azerty.
-
-Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du sujet.
+Les instructions du TD seront données pour Ubuntu 24.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du sujet.
 
 ## Évaluation
 
