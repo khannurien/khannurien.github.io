@@ -30,15 +30,14 @@ Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gra
 
 * un compte [GitHub](https://github.com/) pour héberger votre dépôt et réaliser l'intégration et la livraison continues ;
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
-* un compte [Fly.io](https://fly.io/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
+* un compte [Microsoft Azure](https://portal.azure.com/#view/Microsoft_Azure_Education/EducationMenuBlade/~/overview), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
-Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Fly.io, il peut y avoir une latence entre la demande de création de compte et sa validation.
+Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement.
 
 Pour développer localement, sur votre machine, il vous faudra installer :
 
-* [Node.js](https://nodejs.org/en/) (version LTS, 16 actuellement) ;
-* [Docker](https://docs.docker.com/get-docker/) ;
-* [flyctl](https://fly.io/docs/hands-on/install-flyctl/).
+* [Node.js](https://nodejs.org/en/) (version LTS) ;
+* [Docker](https://docs.docker.com/get-docker/).
 
 Les procédures d'installation seront données lorsque nécessaire, au fur et à mesure du sujet.
 
@@ -326,32 +325,25 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 3. Vérifiez que votre image est bien publiée sur les deux registres lorsque vous poussez un changement sur votre dépôt.
 
-## TD4 : déploiement continu sur PaaS avec Fly.io
+## TD4 : déploiement continu sur PaaS avec Microsoft Azure
 
 ### Objectif
 
 Pour cette dernière étape, nous allons nous intéresser au **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
 
-Cette plateforme sera **Fly.io**. En particulier, leur offre *PaaS* propose un tier gratuit pour déployer des applications sous forme de conteneurs sur leur infrastructure.
+Cette plateforme sera **Microsoft Azure**. Une adresse e-mail `@ensta-bretagne.org` permet à tout étudiant à l'école de profiter de l'équivalents de 100$ de crédits pour expérimenter avec les services du fournisseur.
 
-Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, une image Docker sera recréée et déployée chez Fly.io.
+Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, l'image Docker de l'application sera recréée et déployée sur Azure. Votre application sera ainsi accessible par tous, *via* Internet.
 
 ### Déroulé
 
-> Des alernatives à Fly.io existent : [Railway](https://docs.railway.app/develop/cli), [Vercel](https://vercel.com/docs/getting-started-with-vercel) ou encore [Render](https://render.com/docs/cli) en font partie.
+1. Commencez par un déploiement "à la main" de votre application :
+    * rendez-vous sur la [page d'accueil d'Azure](https://portal.azure.com/#home) ;
+    * cliquez sur "Créer une ressource" et choisissez "Instances de conteneurs" ;
+    * créez un nouveau "Groupe de ressources" (son nom -- comme celui du conteneur par ailleurs -- importe peu dans notre cas) ;
+    * choisissez "Autre registre" comme source d'image ;
+    * utilisez le tag de votre image sur Docker Hub (`docker.io/votre-nom/votre-image:version`) ou GitHub Container Registry (`ghcr.io/votre-nom/votre-image:version`).
 
-1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
+2. Déployez et accédez à votre application. Que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
 
-2. Fly.io utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://fly.io/docs/flyctl/auth-docker/).
-
-3. Publiez l'image Docker de votre application sur le registre Fly.io. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2. Attention : vous devez bien préciser, lors de l'appel à `docker push`, l'adresse du registre que vous souhaitez utiliser (en l'occurrence, `registry.fly.io`). Préfixez le nom de votre image avec l'adresse du registre (`docker push [registre]/[image]`).
-
-4. Déployez l'application chez Fly.io à partir de l'image que vous venez de publier en utilisant `flyctl deploy` (cf. la [documentation](https://fly.io/docs/flyctl/deploy/)). Vous allez devoir préciser les flags suivants : `--app` pour le nom de votre application, et `--image` pour l'adresse de votre image Docker.
-
-5. Visitez votre application en vous rendant à son URL dans votre navigateur, ou en utilisant `curl`. Que constatez-vous ? Inspectez les journaux de l'application grâce à `flyctl logs`. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
-
-6. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
-
-7. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
-
-8. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Fly.io dès lors qu'une modification est publiée sur le dépôt Git. Fly.io fournit un [guide à cet effet](https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/). Reportez dans votre compte-rendu les étapes que vous avez suivies, les difficultés rencontrées et la méthode que vous avez suivie pour tester votre déploiement continu.
+3. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Azure dès lors qu'une modification est publiée sur le dépôt Git. Azure fournit un [guide à cet effet](https://learn.microsoft.com/en-us/azure/app-service/deploy-ci-cd-custom-container).  Reportez dans votre compte-rendu les étapes que vous avez suivies, les difficultés rencontrées et la méthode que vous avez suivie pour tester votre déploiement continu.
