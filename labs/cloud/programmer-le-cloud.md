@@ -181,8 +181,12 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 
     ```shell
     sudo usermod -aG docker ${USER}
-    su - ${USER}
+    newgrp docker
+    # vérifiez le fonctionnement de Docker sans les droits superutilisateur
+    docker run hello-world
     ```
+
+    ⚠️ Malgré la commande `newgrp`, il est probable que vous deviez redémarrer pour que ce changement soit pris en compte.
 
 1. Écrivez votre première image dans un fichier nommé `Dockerfile` à la racine du dépôt de votre application. Voici un squelette de ce fichier, pour vous lancer :
 
