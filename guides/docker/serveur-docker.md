@@ -47,28 +47,22 @@ Faîtes pointer votre nom de domaine ainsi que tous ses sous-domaines vers votre
 On suit [la documentation](https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository) :
 
 ```shell
-# Update the apt package index and install packages to allow apt to use a repository over HTTPS:
+# Add Docker's official GPG key:
 sudo apt-get update
-sudo apt-get install \
-    ca-certificates \
-    curl \
-    gnupg \
-    lsb-release
+sudo apt-get install ca-certificates curl
+sudo install -m 0755 -d /etc/apt/keyrings
+sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+sudo chmod a+r /etc/apt/keyrings/docker.asc
 
-# Add Docker’s official GPG key:
-sudo mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-
-# Use the following command to set up the repository:
+# Add the repository to Apt sources:
 echo \
-  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-
-# Update the apt package index:
+  "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+  $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 sudo apt-get update
 
 # Install Docker Engine, containerd, and Docker Compose.
-sudo apt-get install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 ```
 
 Vérifiez que tout fonctionne correctement :
@@ -109,13 +103,14 @@ services:
       - "--providers.docker"
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik.log"
-      - "--pilot.dashboard=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--serverstransport.insecureskipverify=true"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
       - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
       - "--entrypoints.web.http.redirections.entrypoint.permanent=true"
+      # Une fois l'ensemble de la configuration OK, commenter la ligne suivante pour demander des certificats SSL valides
+      # L'utilisation du CA *staging* permet d'éviter d'être *rate limited* (trop de demandes de certificats sur une fenêtre temporelle)
       - "--certificatesresolvers.letsencrypt.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
       - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
       - "--certificatesresolvers.letsencrypt.acme.email=toto@example.com"
@@ -346,7 +341,7 @@ Remplacez `example.com` par votre nom de domaine dans la configuration de l'envi
 On va créer les conteneurs pour initialiser leur configuration. Les volumes correspondant seront créés à la volée :
 
 ```shell
-docker-compose up -d
+docker compose up -d
 ```
 
 Le cycle de vie d'un conteneur est court : on peut le détruire et le recréer comme on le souhaite, et il s'initialisera de la même manière à chaque lancement.
@@ -364,8 +359,8 @@ Chaque nuit, les données de Nextcloud et sa base de données sont sauvegardées
 N'oubliez pas de mettre à jour régulièrement les images de vos services :
 
 ```shell
-docker-compose pull
-docker-compose up -d
+docker compose pull
+docker compose up -d
 ```
 
 Au fur et à mesure, les versions antérieures des images peuvent être effacées pour récupérer de l'espace disque :
@@ -377,7 +372,7 @@ docker system prune
 Enfin en cas de problème, consultez les journaux des conteneurs :
 
 ```shell
-docker-compose logs
+docker compose logs
 ```
 
 Pour jeter un œil rapidement sur l'activité de vos conteneurs, je vous recommande [ctop](https://github.com/bcicen/ctop).

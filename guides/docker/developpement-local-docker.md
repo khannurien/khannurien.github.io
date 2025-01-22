@@ -74,7 +74,6 @@ services:
       - "--providers.docker"
       - "--accesslog=true"
       - "--accesslog.filepath=/var/log/traefik.log"
-      - "--pilot.dashboard=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
