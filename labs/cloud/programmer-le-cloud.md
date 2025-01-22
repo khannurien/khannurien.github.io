@@ -30,20 +30,15 @@ Pour mener à bien ce mini-projet, vous devrez vous appuyer sur les services gra
 
 * un compte [GitHub](https://github.com/) pour héberger votre dépôt et réaliser l'intégration et la livraison continues ;
 * un compte [Docker Hub](https://hub.docker.com/) pour publier l'image Docker de votre application ;
-* un compte [Fly.io](https://fly.io/), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
+* un compte [Microsoft Azure](https://portal.azure.com/#view/Microsoft_Azure_Education/EducationMenuBlade/~/overview), enfin, qui vous servira à déployer l'application sur leur offre *Platform-as-a-Service*.
 
-> **Note**
-> Alternatives to Fly.io : 
-> Vous pouvez également visiter [Railway](https://railway.app) ou [Render](https://render.com), qui sont des plateformes similaires.
-> En fonction de leur évolution, un plan gratuit devrait toujours être disponible.
-
-Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement. Notamment chez Fly.io, il peut y avoir une latence entre la demande de création de compte et sa validation.
+Pour ne pas perdre de temps : si ce n'est pas déjà fait, créez ces comptes immédiatement.
 
 Pour développer localement, sur votre machine, il vous faudra installer :
 
-* [Node.js](https://nodejs.org/en/) (version LTS, 16 actuellement) ;
-* [Docker](https://docs.docker.com/get-docker/) ;
-* [flyctl](https://fly.io/docs/hands-on/install-flyctl/).
+* [Visual Studio Code](https://code.visualstudio.com/) ;
+* [Node.js](https://nodejs.org/en/) (version LTS) ;
+* [Docker](https://docs.docker.com/get-docker/).
 
 Les procédures d'installation seront données lorsque nécessaire, au fur et à mesure du sujet.
 
@@ -51,9 +46,7 @@ N'hésitez pas à travailler dans une machine virtuelle. Si vous utilisez Window
 
 * [Installer WSL 2 -- Microsoft Docs](https://docs.microsoft.com/fr-fr/windows/wsl/install)
 
-Si vous travaillez sur une machine de salle informatique, vous pouvez créer une VM VirtualBox à partir d'[une image disque Ubuntu Server 20.04.3](https://sourceforge.net/projects/osboxes/files/v/vb/59-U-u-svr/20.04/20.04.3/64bit.7z/download). Pour cette VM, le login est "osboxes", le mot de passe "osboxes.org". Attention, le clavier est par défaut en qwerty, il faut donc taper "osboxes:org" sur un clavier français. Utilisez ensuite la commande `sudo loadkeys fr` pour passer en azerty.
-
-Les instructions du TD seront données pour Ubuntu 20.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du sujet.
+Les instructions du TD seront données pour Ubuntu 24.04 (qui est notamment la distribution par défaut pour WSL2). **Vous êtes responsable de votre environnement de développement** : si vous n'êtes pas certain-e de le maîtriser, alignez-vous sur ce choix, qui vous permettra de gagner du temps sur les aspects opérationnels du sujet.
 
 ## Évaluation
 
@@ -83,15 +76,17 @@ La fonctionnalité attendue est la suivante :
 * Pour ce chemin, on retourne un objet (sérialisé en JSON) de la forme suivante :
 
   ```typescript
-    interface ISystemInformation {
-      cpu: si.Systeminformation.CpuData;
-      system: si.Systeminformation.SystemData;
-      mem: si.Systeminformation.MemData;
-      os: si.Systeminformation.OsData;
-      currentLoad: si.Systeminformation.CurrentLoadData;
-      processes: si.Systeminformation.ProcessesData;
-      diskLayout: si.Systeminformation.DiskLayoutData[];
-      networkInterfaces: si.Systeminformation.NetworkInterfacesData[];
+    export interface ISystemInformation {
+    cpu: si.Systeminformation.CpuData;
+    system: si.Systeminformation.SystemData;
+    mem: si.Systeminformation.MemData;
+    os: si.Systeminformation.OsData;
+    currentLoad: si.Systeminformation.CurrentLoadData;
+    processes: si.Systeminformation.ProcessesData;
+    diskLayout: si.Systeminformation.DiskLayoutData[];
+    networkInterfaces:
+        | si.Systeminformation.NetworkInterfacesData
+        | si.Systeminformation.NetworkInterfacesData[];
     }
   ```
 
@@ -151,13 +146,24 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 0. Installez Docker et testez son fonctionnement :
   
     ```shell
-    sudo apt update
-    sudo apt install apt-transport-https ca-certificates curl software-properties-common
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-    sudo apt update
-    sudo apt install docker-ce
-    # vérifiez le fonctionnement du daemon (sauf WSL2) :
+    # Ajout à apt de la clef GPG des dépôts officiels Docker
+    sudo apt-get update
+    sudo apt-get install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+    # Ajout des dépôts officiels Docker aux sources apt
+    echo \
+    "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+    $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+    sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+    sudo apt-get update
+
+    # Installation de la dernière version de Docker
+    sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+    # Vérifier le fonctionnement du daemon (sauf WSL2) :
     sudo systemctl status docker
     ```
 
@@ -173,14 +179,18 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 
     ```shell
     sudo usermod -aG docker ${USER}
-    su - ${USER}
+    newgrp docker
+    # vérifiez le fonctionnement de Docker sans les droits superutilisateur
+    docker run hello-world
     ```
+
+    ⚠️ Malgré la commande `newgrp`, il est probable que vous deviez redémarrer pour que ce changement soit pris en compte.
 
 1. Écrivez votre première image dans un fichier nommé `Dockerfile` à la racine du dépôt de votre application. Voici un squelette de ce fichier, pour vous lancer :
 
     ```Dockerfile
     # image de départ
-    FROM alpine:3.15
+    FROM alpine:3.20
 
     # chemin de travail
     WORKDIR ...
@@ -221,6 +231,8 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
     sudo docker run -p 8123:8000 -m1024m --cpus=1 sysinfo-api:0.0.1
     ```
 
+    > 💡 Pour vous aider à répondre à cette question, regardez les derniers slides du cours, au sujet de l'isolation des processus sous Linux. Vous pouvez également regarder l'implémentation de la fonction `bocker_run` du [projet `bocker`](https://github.com/p8952/bocker/blob/master/bocker). C'est une implémentation "naïve", très simple, d'un système de conteneurisation semblable à Docker. Vous pouvez y voir les primitives fournies par Linux et utilisées par l'auteur pour réaliser l'isolation des processus (*i.e.* des conteneurs). Que signifient `cgcreate` ? `cgset` ? `cgexec` ? Qu'est-ce que la commande `chroot` ?
+
 4. Inspectez votre image, d'abord avec la CLI de Docker :
 
     ```shell
@@ -230,8 +242,8 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
     Puis utilisez l'outil `dive` :
 
     ```shell
-    wget https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb
-    sudo apt install ./dive_0.10.0_linux_amd64.deb
+    wget https://github.com/wagoodman/dive/releases/download/v0.12.0/dive_0.12.0_linux_amd64.deb
+    sudo dpkg -i dive_0.12.0_linux_amd64.deb
     dive sysinfo-api:0.0.1
     ```
 
@@ -241,13 +253,17 @@ Vous trouverez l'instruction `FROM` à la première ligne de tout `Dockerfile` :
 
     ```Dockerfile
     # stage compilation
-    FROM alpine:3.15 as builder
+    FROM alpine:3.20 AS builder
+    # toutes les étapes nécessaires à la compilation de l'application
     # ...
 
     # stage exécution
-    FROM alpine:3.15 as runner
+    FROM alpine:3.20 AS runner
+    # toutes les étapes nécessaires à l'exécution de l'application
     # ...
-    COPY --from=builder --chown=node:node ...
+
+    # indice : pour récupérer des fichiers depuis le stage précédent
+    COPY --from=builder --chown=node:node [chemin source] [chemin destination]
     ```
 
 6. Vous allez maintenant pouvoir publier votre image Docker sur un dépôt (Docker Hub). Commencez par la tagger avec votre nom d'utilisateur (pas le mien :-)) :
@@ -279,6 +295,8 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 ### Déroulé
 
+#### Intégration continue
+
 0. Suivez [le tutoriel de *GitHub Actions*](https://docs.github.com/en/actions/quickstart) pour écrire votre premier *workflow*.
 
 1. Inspirez-vous du *workflow* que vous avez écrit dans le cadre du tutoriel pour correspondre aux exigences suivantes :
@@ -292,32 +310,39 @@ Ces fichiers *action* peuvent être mobilisés dans le cadre d'une composition a
 
 3. Relisez la question 6 du TD1. Est-ce que ce TD3 vous permet d'enrichir votre réponse ?
 
-## TD4 : déploiement sur PaaS avec Fly.io
+#### Livraison continue
+
+1. Assurez-vous que que votre premier *workflow* s'exécute correctement et vérifie que votre application passe bien sa suite de tests unitaires.
+
+2. Créez un deuxième *workflow* qui s'exécutera dans un second temps. Ce *workflow* devra :
+
+    * construire l'image Docker de votre application ;
+    * la publier sur [Docker Hub](https://hub.docker.com/) ;
+    * la publier sur [GitHub Container Registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
+
+    ⚠️ Il faudra veiller à ne pas divulguer de secrets (mots de passe, clefs d'API, etc.) dans vos fichiers actions. Lisez attentivement la [documentation de GitHub au sujet des secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions).
+
+3. Vérifiez que votre image est bien publiée sur les deux registres lorsque vous poussez un changement sur votre dépôt.
+
+## TD4 : déploiement continu sur PaaS
 
 ### Objectif
 
 Pour cette dernière étape, nous allons nous intéresser au **déploiement** de notre application, c'est-à-dire sa *mise en production* sur une plateforme cible.
 
-Cette plateforme sera **Fly.io**. En particulier, leur offre *PaaS* propose un tier gratuit pour déployer des applications sous forme de conteneurs sur leur infrastructure.
+Cette plateforme sera **Microsoft Azure**. Une adresse e-mail `@ensta-bretagne.org` permet à tout étudiant à l'école de profiter de l'équivalent de 100$ de crédits pour expérimenter avec les services du fournisseur. [Créez votre compte](https://azure.microsoft.com/fr-fr/free/students) pour bénéficier de ces crédits avant de passer au déroulé du TD.
 
-Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, une image Docker sera recréée et déployée chez Fly.io.
+Vous allez d'abord déployer votre application à la main, afin de vous familiariser avec le processus. Puis, vous ferez en sorte d'automatiser cette dernière étape pour atteindre l'objectif du **déploiement continu** : à chaque modification de votre application, une fois les tests passés, l'image Docker de l'application sera recréée et déployée sur Azure. Votre application sera ainsi accessible par tous, *via* Internet.
 
 ### Déroulé
 
-> Des alernatives à Fly.io existent: [Railway](https://docs.railway.app/develop/cli), [Vercel](https://vercel.com/docs/getting-started-with-vercel) ou encore [Render](https://render.com/docs/cli) en font partie.
+1. Commencez par un déploiement "à la main" de votre application. Ci-dessous, un résumé inspiré du [guide de démarrage](https://learn.microsoft.com/fr-fr/azure/container-instances/container-instances-quickstart-portal) :
+    * rendez-vous sur la [page d'accueil d'Azure](https://portal.azure.com/#home) ;
+    * cliquez sur "Créer une ressource" et choisissez "Instances de conteneurs" ;
+    * créez un nouveau "Groupe de ressources" (son nom -- comme celui du conteneur par ailleurs -- importe peu dans notre cas) ;
+    * choisissez "Autre registre" comme source d'image ;
+    * utilisez le tag de votre image sur Docker Hub (`docker.io/votre-nom/votre-image:version`) ou GitHub Container Registry (`ghcr.io/votre-nom/votre-image:version`).
 
-1. Fly.io fournit un outil en ligne de commande, *flyctl*, qui facilite la connexion aux services, la création d'une application Fly.io, la création de conteneurs sur la plateforme... Commencez par installer cet outil, puis utilisez-le pour vous connecter à votre compte Fly.io et créer une application. Pour cela, appuyez-vous sur [la documentation Fly Docs](https://fly.io/docs/hands-on/install-flyctl/).
+2. Déployez et accédez à votre application. Que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
 
-2. Fly.io utilise son propre registre pour héberger les images Docker de vos applications, le *Container Registry*. L'outil CLI va vous permettre de vous identifier auprès de ce registre. Suivez [la documentation associée](https://fly.io/docs/flyctl/auth-docker/).
-
-3. Publiez l'image Docker de votre application sur le registre Fly.io. Pour cela, vous pouvez utiliser les commandes `docker` que vous avez découvertes lors du TD2. Attention : vous devez bien préciser, lors de l'appel à `docker push`, l'adresse du registre que vous souhaitez utiliser (en l'occurrence, `registry.fly.io`). Préfixez le nom de votre image avec l'adresse du registre (`docker push [registre]/[image]`).
-
-4. Déployez l'application chez Fly.io à partir de l'image que vous venez de publier en utilisant `flyctl deploy` (cf. la [documentation](https://fly.io/docs/flyctl/deploy/)). Vous allez devoir préciser les flags suivants : `--app` pour le nom de votre application, et `--image` pour l'adresse de votre image Docker.
-
-5. Visitez votre application en vous rendant à son URL dans votre navigateur, ou en utilisant `curl`. Que constatez-vous ? Inspectez les journaux de l'application grâce à `flyctl logs`. Que repérez-vous ? Expliquez brièvement ce qu'il va falloir corriger dans l'application.
-
-6. Appliquez le correctif nécessaire dans le code votre application. À quel(s) point(s) des [recommandations Twelve-Factor App](https://12factor.net/fr/) pouvez-vous relier ce changement ?
-
-7. Déployez et testez à nouveau. Grâce à votre application, que pouvez-vous dire sur la machine qui exécute votre code ? Remarquez-vous des éléments intéressants ? Pensez-vous que la sortie serait similaire si votre application était exécutée dans une machine virtuelle, plutôt que dans un conteneur ?
-
-8. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Fly.io dès lors qu'une modification est publiée sur le dépôt Git. Fly.io fournit un [guide à cet effet](https://fly.io/docs/app-guides/continuous-deployment-with-github-actions/). Reportez dans votre compte-rendu les étapes que vous avez suivies, les difficultés rencontrées et la méthode que vous avez suivie pour tester votre déploiement continu.
+3. La dernière étape de ce mini-projet consiste à automatiser le déploiement de l'application chez Azure dès lors qu'une modification est publiée sur le dépôt Git. Azure fournit un [guide à cet effet](https://learn.microsoft.com/en-us/azure/app-service/deploy-ci-cd-custom-container).  Reportez dans votre compte-rendu les étapes que vous avez suivies, les difficultés rencontrées et la méthode que vous avez suivie pour tester votre déploiement continu.
